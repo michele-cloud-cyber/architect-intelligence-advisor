@@ -18,6 +18,21 @@ def collect(self, landing_zone):
         print(f"AWS Error: {error}")
 
     landing_zone.organization = "Example Organization"
+try:
+        response = organizations.list_accounts()
+
+        landing_zone.accounts = []
+
+        for account in response["Accounts"]:
+            landing_zone.accounts.append(account["Name"])
+
+        print("AWS Accounts discovered:")
+
+        for account in landing_zone.accounts:
+            print(f" - {account}")
+
+    except ClientError as error:
+        print(f"Unable to retrieve AWS accounts: {error}")
 
     landing_zone.accounts = [
         "Management",
