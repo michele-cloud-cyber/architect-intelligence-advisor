@@ -40,7 +40,23 @@ try:
         "Development",
         "Production"
     ]
+ec2 = boto3.client("ec2", region_name="eu-west-1")
 
+    try:
+        response = ec2.describe_regions(AllRegions=False)
+
+        landing_zone.regions = []
+
+        for region in response["Regions"]:
+            landing_zone.regions.append(region["RegionName"])
+
+        print("AWS Regions discovered:")
+
+        for region in landing_zone.regions:
+            print(f" - {region}")
+
+    except ClientError as error:
+        print(f"Unable to retrieve AWS regions: {error}")
     landing_zone.regions = [
         "eu-west-1",
         "eu-central-1"
