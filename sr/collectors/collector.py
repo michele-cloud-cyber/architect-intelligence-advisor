@@ -5,6 +5,17 @@ from botocore.exceptions import ClientError
 def collect(self, landing_zone):
 
     print("Starting data collection...")
+     organizations = boto3.client("organizations")
+
+    try:
+        response = organizations.describe_organization()
+
+        landing_zone.organization = response["Organization"]["MasterAccountEmail"]
+
+        print(f"Organization: {landing_zone.organization}")
+
+    except ClientError as error:
+        print(f"AWS Error: {error}")
 
     landing_zone.organization = "Example Organization"
 
