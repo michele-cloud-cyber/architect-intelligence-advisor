@@ -11,12 +11,16 @@ class Analyzer:
         print("Analyzer initialized.")
 
     def analyze(self):
-        print("Starting analysis...")
+        print("Starting architectural analysis...")
+
+        print("Analyzing Landing Zone topology...")
         print("Analyzing security posture...")
         print("Analyzing IAM permissions...")
-        print("Analyzing networking...")
+        print("Analyzing network architecture...")
         print("Analyzing operational health...")
         print("Detecting anomalies...")
-        print("Evaluating architectural best practices...")
-        print("Generating insights...")
+        print("Detecting architectural patterns...")
+        print("Calculating architectural risk score...")
+        print("Generating Decision Intelligence insights...")
+
         print("Analysis completed.")
