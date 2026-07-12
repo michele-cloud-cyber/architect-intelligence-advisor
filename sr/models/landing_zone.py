@@ -16,7 +16,7 @@ class LandingZone:
         self.operations_score = 0
 
         self.findings = []
-
+        self.risk_score = 0
     def add_finding(self, finding):
         self.findings.append(finding)
 
