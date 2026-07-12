@@ -1,24 +1,31 @@
-"""
-Collector Manager
+def collect(self, landing_zone):
 
-Collects information from AWS services and builds
-the Landing Zone Digital Twin (LZDT).
-"""
+    print("Starting data collection...")
 
-class Collector:
+    landing_zone.organization = "Example Organization"
 
-    def __init__(self):
-        print("Collector initialized.")
+    landing_zone.accounts = [
+        "Management",
+        "Security",
+        "Development",
+        "Production"
+    ]
 
-    def collect(self):
-        print("Starting data collection...")
-        print("Collecting AWS Organizations...")
-        print("Collecting IAM data...")
-        print("Collecting CloudTrail events...")
-        print("Collecting AWS Config resources...")
-        print("Collecting GuardDuty findings...")
-        print("Collecting Security Hub findings...")
-        print("Collecting Trusted Advisor checks...")
-        print("Collecting Cost Explorer data...")
-        print("Building Landing Zone Digital Twin...")
-        print("Collection completed.")
+    landing_zone.regions = [
+        "eu-west-1",
+        "eu-central-1"
+    ]
+
+    landing_zone.add_finding(
+        "CloudTrail enabled."
+    )
+
+    landing_zone.add_finding(
+        "GuardDuty enabled."
+    )
+
+    landing_zone.add_finding(
+        "Security Hub enabled."
+    )
+
+    print("Collection completed.")
