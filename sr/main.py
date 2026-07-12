@@ -17,9 +17,9 @@ def main():
     Logger.info("Starting Architect Intelligence Advisor")
 
     landing_zone = LandingZone()
-
-    collector = Collector()
-    collector.collect()
+collector = Collector()
+    collector.collect(landing_zone)
+    
 
     analyzer = Analyzer()
     analyzer.analyze()
