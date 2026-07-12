@@ -16,20 +16,26 @@ def main():
 
     Logger.info("Starting Architect Intelligence Advisor")
 
+    # Create Landing Zone object
     landing_zone = LandingZone()
-collector = Collector()
+
+    # Collect AWS data
+    collector = Collector()
     collector.collect(landing_zone)
-    
 
+    # Analyze architecture
     analyzer = Analyzer()
-    analyzer.analyze()
+    analyzer.analyze(landing_zone)
 
+    # Calculate risk score
     risk = RiskEngine()
-    risk.evaluate()
+    risk_score = risk.evaluate(landing_zone)
 
+    # Generate recommendations
     recommendation = RecommendationEngine()
-    recommendation.generate()
+    recommendation.generate(landing_zone, risk_score)
 
+    # Print final summary
     landing_zone.summary()
 
     Logger.info("Application completed successfully")
