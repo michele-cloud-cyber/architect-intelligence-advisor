@@ -50,5 +50,5 @@ class RiskEngine:
         print("Architecture risk: MEDIUM")
     else:
         print("Architecture risk: HIGH")
-
+      Landing_zone.risk_score = risk_score
     print("Risk evaluation completed.")
