@@ -10,7 +10,7 @@ class Analyzer:
     def __init__(self):
         print("Analyzer initialized.")
 
-    def analyze(self):
+    def analyze(self, landing_zone):
         print("Starting architectural analysis...")
 
         print("Analyzing Landing Zone topology...")
