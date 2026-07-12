@@ -1,3 +1,7 @@
+import boto3
+from botocore.exceptions import ClientError
+
+
 def collect(self, landing_zone):
 
     print("Starting data collection...")
