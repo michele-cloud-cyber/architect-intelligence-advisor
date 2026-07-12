@@ -1,19 +1,38 @@
 """
 Architect Intelligence Advisor (AIA)
 
-Entry point of the application.
+Application Entry Point
 """
 
-def main():
-    print("=" * 60)
-    print("Architect Intelligence Advisor")
-    print("Decision Intelligence Platform for AWS Landing Zones")
-    print("=" * 60)
+from collectors.collector import Collector
+from analyzers.analyzer import Analyzer
+from engines.risk_engine import RiskEngine
+from engines.recommendation_engine import RecommendationEngine
+from models.landing_zone import LandingZone
+from utils.logger import Logger
 
-    print("Initializing application...")
-    print("Loading configuration...")
-    print("Preparing Landing Zone Digital Twin...")
-    print("Ready.")
+
+def main():
+
+    Logger.info("Starting Architect Intelligence Advisor")
+
+    landing_zone = LandingZone()
+
+    collector = Collector()
+    collector.collect()
+
+    analyzer = Analyzer()
+    analyzer.analyze()
+
+    risk = RiskEngine()
+    risk.evaluate()
+
+    recommendation = RecommendationEngine()
+    recommendation.generate()
+
+    landing_zone.summary()
+
+    Logger.info("Application completed successfully")
 
 
 if __name__ == "__main__":
