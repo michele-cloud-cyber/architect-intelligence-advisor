@@ -1,10 +1,9 @@
 """
 Fingerprint Engine
 
-Creates a unique architectural fingerprint for the Landing Zone.
+Creates a unique architectural fingerprint
+for the Landing Zone.
 """
-
-import hashlib
 
 
 class FingerprintEngine:
@@ -16,15 +15,51 @@ class FingerprintEngine:
 
         print("Generating Landing Zone fingerprint...")
 
-        fingerprint_data = [
-            str(landing_zone.findings),
-            str(landing_zone.risk_score)
-        ]
+        findings = landing_zone.findings
 
-        raw = "|".join(fingerprint_data)
+        fingerprint = {
+            "security": 0,
+            "networking": 80,
+            "identity": 75,
+            "governance": 70,
+            "logging": 0,
+            "architecture": "Unknown"
+        }
 
-        fingerprint = hashlib.sha256(raw.encode()).hexdigest()
+        # Security
+        if "GuardDuty enabled." in findings:
+            fingerprint["security"] += 40
+
+        if "Security Hub enabled." in findings:
+            fingerprint["security"] += 40
+
+        # Logging
+        if "CloudTrail enabled." in findings:
+            fingerprint["logging"] = 100
+
+        overall = (
+            fingerprint["security"] +
+            fingerprint["networking"] +
+            fingerprint["identity"] +
+            fingerprint["governance"] +
+            fingerprint["logging"]
+        ) / 5
+
+        fingerprint["overall"] = overall
+
+        if overall >= 90:
+            fingerprint["architecture"] = "Excellent"
+        elif overall >= 75:
+            fingerprint["architecture"] = "Good"
+        elif overall >= 60:
+            fingerprint["architecture"] = "Fair"
+        else:
+            fingerprint["architecture"] = "Poor"
 
         landing_zone.fingerprint = fingerprint
 
-        print(f"Fingerprint: {fingerprint[:16]}...")
+        print("Fingerprint generated.")
+        print(f"Overall Fingerprint Score: {overall:.1f}")
+        print(f"Architecture Rating: {fingerprint['architecture']}")
+
+        return fingerprint

@@ -1,47 +1,44 @@
 """
 Recommendation Engine
 
-Generates architectural recommendations based on
-analysis results and calculated risks.
+Generates recommendations based on the architectural risk score.
 """
+
 
 class RecommendationEngine:
 
     def __init__(self):
         print("Recommendation Engine initialized.")
 
-   def generate(self, landing_zone, risk_score):
+    def generate(self, landing_zone, risk_score):
 
-    print("Generating recommendations...")
+        print("Generating recommendations...")
 
-    recommendations = []
+        recommendations = []
 
-    if "CloudTrail enabled." not in landing_zone.findings:
-        recommendations.append(
-            "Enable AWS CloudTrail for auditing and compliance."
-        )
+        if "CloudTrail enabled." not in landing_zone.findings:
+            recommendations.append(
+                "Enable AWS CloudTrail across all AWS accounts."
+            )
 
-    if "GuardDuty enabled." not in landing_zone.findings:
-        recommendations.append(
-            "Enable Amazon GuardDuty for threat detection."
-        )
+        if "GuardDuty enabled." not in landing_zone.findings:
+            recommendations.append(
+                "Enable Amazon GuardDuty in every AWS Region."
+            )
 
-    if "Security Hub enabled." not in landing_zone.findings:
-        recommendations.append(
-            "Enable AWS Security Hub to centralize security findings."
-        )
+        if "Security Hub enabled." not in landing_zone.findings:
+            recommendations.append(
+                "Enable AWS Security Hub."
+            )
 
-    if risk_score >= 60:
-        recommendations.append(
-            "Perform a full AWS Well-Architected Review."
-        )
+        if risk_score > 60:
+            recommendations.append(
+                "Perform a complete Well-Architected Review."
+            )
 
-    print("\nArchitect Recommendations:")
+        landing_zone.recommendations = recommendations
 
-    if recommendations:
+        print("Recommendations generated.")
+
         for recommendation in recommendations:
             print(f"- {recommendation}")
-    else:
-        print("No recommendations. Landing Zone follows best practices.")
-
-    return recommendations

@@ -8,6 +8,7 @@ from collectors.collector import Collector
 from analyzers.analyzer import Analyzer
 from engines.risk_engine import RiskEngine
 from engines.recommendation_engine import RecommendationEngine
+from engines.fingerprint_engine import FingerprintEngine
 from models.landing_zone import LandingZone
 from utils.logger import Logger
 
@@ -27,6 +28,10 @@ def main():
     analyzer = Analyzer()
     analyzer.analyze(landing_zone)
 
+    # Generate fingerprint
+    fingerprint = FingerprintEngine()
+    fingerprint.generate(landing_zone)
+
     # Calculate risk score
     risk = RiskEngine()
     risk_score = risk.evaluate(landing_zone)
@@ -35,7 +40,7 @@ def main():
     recommendation = RecommendationEngine()
     recommendation.generate(landing_zone, risk_score)
 
-    # Print final summary
+    # Print summary
     landing_zone.summary()
 
     Logger.info("Application completed successfully")
