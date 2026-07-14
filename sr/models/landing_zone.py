@@ -1,11 +1,6 @@
-"""
-Landing Zone Digital Twin
-"""
-
 class LandingZone:
 
     def __init__(self):
-
         self.organization = None
         self.accounts = []
         self.regions = []
@@ -17,6 +12,11 @@ class LandingZone:
 
         self.findings = []
         self.risk_score = 0
+
+        self.recommendations = []
+        self.priorities = []
+        self.fingerprint = {}
+
     def add_finding(self, finding):
         self.findings.append(finding)
 

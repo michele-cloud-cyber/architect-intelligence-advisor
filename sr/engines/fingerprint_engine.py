@@ -37,6 +37,7 @@ class FingerprintEngine:
         if "CloudTrail enabled." in findings:
             fingerprint["logging"] = 100
 
+        # Overall score
         overall = (
             fingerprint["security"] +
             fingerprint["networking"] +
@@ -47,6 +48,7 @@ class FingerprintEngine:
 
         fingerprint["overall"] = overall
 
+        # Architecture rating
         if overall >= 90:
             fingerprint["architecture"] = "Excellent"
         elif overall >= 75:
@@ -56,6 +58,12 @@ class FingerprintEngine:
         else:
             fingerprint["architecture"] = "Poor"
 
+        # Save scores inside Landing Zone
+        landing_zone.security_score = fingerprint["security"]
+        landing_zone.network_score = fingerprint["networking"]
+        landing_zone.identity_score = fingerprint["identity"]
+        landing_zone.operations_score = fingerprint["governance"]
+
         landing_zone.fingerprint = fingerprint
 
         print("Fingerprint generated.")
@@ -63,3 +71,4 @@ class FingerprintEngine:
         print(f"Architecture Rating: {fingerprint['architecture']}")
 
         return fingerprint
+
