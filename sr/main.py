@@ -3,6 +3,7 @@ Architect Intelligence Advisor (AIA)
 
 Application Entry Point
 """
+
 from engines.priority_engine import PriorityEngine
 from collectors.collector import Collector
 from analyzers.analyzer import Analyzer
@@ -15,7 +16,7 @@ from engines.forecast_engine import ForecastEngine
 from engines.history_engine import HistoryEngine
 from engines.drift_engine import DriftEngine
 from engines.executive_report_engine import ExecutiveReportEngine
-
+from engines.bedrock_engine import BedrockEngine
 
 from utils.logger import Logger
 from engines.decision_engine import DecisionEngine
@@ -25,7 +26,7 @@ def main():
 
     Logger.info("Starting Architect Intelligence Advisor")
 
-    # Create Landing Zone object
+    # Create Landing Zone
     landing_zone = LandingZone()
 
     # Collect AWS data
@@ -36,39 +37,61 @@ def main():
     analyzer = Analyzer()
     analyzer.analyze(landing_zone)
 
-    # Generate fingerprint
+    # Fingerprint
     fingerprint = FingerprintEngine()
     fingerprint.generate(landing_zone)
+
+    # Priorities
     priority = PriorityEngine()
     priority.generate(landing_zone)
 
-    # Calculate risk score
+    # Risk
     risk = RiskEngine()
     risk_score = risk.evaluate(landing_zone)
 
-    # Generate recommendations
+    # Recommendations
     recommendation = RecommendationEngine()
     recommendation.generate(landing_zone, risk_score)
+
+    # Decisions
     decision = DecisionEngine()
     decision.generate(landing_zone, risk_score)
+
+    # Narrator
     narrator = NarratorEngine()
     narrator.generate(landing_zone)
+
+    # Forecast
     forecast = ForecastEngine()
     forecast.generate(landing_zone, risk_score)
+
+    # History
     history = HistoryEngine()
     history.save(landing_zone, risk_score)
 
+    # Drift
     drift = DriftEngine()
     drift.generate(landing_zone)
 
+    # Executive Report
     executive = ExecutiveReportEngine()
     executive.generate(landing_zone, risk_score)
 
-
-    # Print summary
+    # Summary
     landing_zone.summary()
 
     Logger.info("Application completed successfully")
+
+    print("\n========== BEDROCK TEST ==========\n")
+
+    # Bedrock
+    bedrock = BedrockEngine()
+
+    prompt = bedrock.generate_prompt(landing_zone)
+
+    response = bedrock.invoke(prompt)
+
+    print(response)
 
 
 if __name__ == "__main__":
