@@ -1,1 +1,10 @@
-c81a8756188c36aa7e80ca36c79ec27013fb04f11dc298dbf423f25399a9bb7c
+{
+    "security": 80,
+    "networking": 80,
+    "identity": 85,
+    "governance": 70,
+    "logging": 100,
+    "architecture": "Good",
+    "overall": 83.0,
+    "hash": "123e72a49615c97cb959c2316c3a0c0021fa2c55c0e2136c953876384e15bede"
+}

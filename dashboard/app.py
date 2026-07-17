@@ -1,11 +1,17 @@
 import os
 import sys
+print("APP STARTED")
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import streamlit as st
 import pandas as pd
+
 from sr.engines.bedrock_engine import BedrockEngine
+from sr.engines.fingerprint_engine import FingerprintEngine
 from sr.models.landing_zone import LandingZone
+from sr.engines.history_engine import HistoryEngine
+from sr.services.landing_zone_service import build_landing_zone
 
 st.set_page_config(
     page_title="AI Architect Advisor",
@@ -13,17 +19,22 @@ st.set_page_config(
     layout="wide"
 )
 
+# ==========================================================
+# Landing Zone
+# ==========================================================
 
+landing_zone = build_landing_zone()
 
-# ==========================
+fingerprint = landing_zone.fingerprint
+# ==========================================================
 # SIDEBAR
-# ==========================
+# ==========================================================
 
 st.sidebar.title("🤖 AI Architect Advisor")
 
 st.sidebar.markdown("---")
 
-account = st.sidebar.selectbox(
+st.sidebar.selectbox(
     "AWS Account",
     [
         "All Accounts",
@@ -34,7 +45,7 @@ account = st.sidebar.selectbox(
     ]
 )
 
-region = st.sidebar.selectbox(
+st.sidebar.selectbox(
     "Region",
     [
         "All Regions",
@@ -44,7 +55,7 @@ region = st.sidebar.selectbox(
     ]
 )
 
-environment = st.sidebar.selectbox(
+st.sidebar.selectbox(
     "Environment",
     [
         "All",
@@ -60,17 +71,18 @@ st.sidebar.metric("Landing Zone", "Healthy")
 st.sidebar.metric("AI Status", "Online")
 st.sidebar.metric("Last Scan", "2 min ago")
 
-st.title("🤖 AI Architect Advisor")
-st.subheader("AWS Landing Zone Intelligence Platform")
+# ==========================================================
+# HEADER
+# ==========================================================
 
 st.title("🤖 AI Architect Advisor")
 st.subheader("AWS Landing Zone Intelligence Platform")
 
 st.divider()
 
-# ===========================
+# ==========================================================
 # KPI
-# ===========================
+# ==========================================================
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -86,11 +98,31 @@ with col3:
 with col4:
     st.metric("Monthly Cost", "$487", "-8%")
 
+# ==========================================================
+# Fingerprint
+# ==========================================================
+
 st.divider()
 
-# ===========================
+st.subheader("🔐 Landing Zone Fingerprint")
+
+c1, c2 = st.columns(2)
+
+with c1:
+    st.metric("Architecture Rating", fingerprint["architecture"])
+    st.metric("Overall Score", f"{fingerprint['overall']:.1f}")
+
+with c2:
+    st.metric("Security", fingerprint["security"])
+    st.metric("Logging", fingerprint["logging"])
+
+st.code(fingerprint["hash"])
+
+# ==========================================================
 # Executive Summary
-# ===========================
+# ==========================================================
+
+st.divider()
 
 st.subheader("🧠 Executive Summary")
 
@@ -108,9 +140,9 @@ Overall posture has improved compared to the previous assessment.
 📈 Forecast indicates the Security Score could improve from 92 to 97 after recommended remediations.
 """)
 
-# ===========================
+# ==========================================================
 # Landing Zone Posture
-# ===========================
+# ==========================================================
 
 st.subheader("📈 Landing Zone Posture")
 
@@ -123,16 +155,15 @@ chart = pd.DataFrame({
 
 st.line_chart(chart)
 
-# ===========================
+# ==========================================================
 # Landing Zone Health
-# ===========================
+# ==========================================================
 
 st.subheader("🛡️ Landing Zone Health")
 
 col1, col2 = st.columns(2)
 
 with col1:
-
     st.write("Security")
     st.progress(92)
 
@@ -140,16 +171,15 @@ with col1:
     st.progress(94)
 
 with col2:
-
     st.write("IAM Governance")
     st.progress(73)
 
     st.write("FinOps")
     st.progress(81)
 
-# ===========================
+# ==========================================================
 # AI Assessment
-# ===========================
+# ==========================================================
 
 st.subheader("🧠 AI Executive Assessment")
 
@@ -165,25 +195,21 @@ Cost optimization initiatives are reducing EC2 spend.
 Forecast models indicate a Security Score of 97/100 after the recommended actions are completed.
 """)
 
-# ===========================
+# ==========================================================
 # Recommendations
-# ===========================
+# ==========================================================
 
 st.subheader("✅ Recommended Actions")
 
 st.checkbox("Remove unused IAM Administrator policies")
-
 st.checkbox("Create additional VPC Endpoints")
-
 st.checkbox("Enable GuardDuty organization-wide")
-
 st.checkbox("Optimize NAT Gateway traffic")
-
 st.checkbox("Enable automatic Security Hub remediation")
 
-# ===========================
+# ==========================================================
 # AI Chat
-# ===========================
+# ==========================================================
 
 st.divider()
 
@@ -197,8 +223,6 @@ if st.button("Ask AI"):
 
     try:
 
-        landing_zone = LandingZone()
-
         engine = BedrockEngine()
 
         prompt = engine.generate_prompt(landing_zone)
@@ -211,10 +235,39 @@ if st.button("Ask AI"):
         st.success(answer)
 
     except Exception as e:
-
         st.error(f"Error: {e}")
 
+# ==========================================================
+# AI Assessment
+# ==========================================================
+
 st.markdown("### 🔍 AI Assessment")
+# ===========================
+# Historical Changes
+# ===========================
+
+st.divider()
+
+st.subheader("📜 Historical Changes")
+
+try:
+
+    history = HistoryEngine()
+
+    landing_zone = LandingZone()
+
+    current_report = {
+        "overall_score": 92,
+        "risk_score": 18
+    }
+
+    changes = history.compare(current_report)
+
+    for change in changes:
+        st.info(change)
+
+except Exception as e:
+    st.warning(f"History unavailable: {e}")
 
 st.info("""
 The account **Production-Shared** currently has the highest operational risk.

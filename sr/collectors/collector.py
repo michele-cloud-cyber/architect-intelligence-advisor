@@ -14,131 +14,114 @@ class Collector:
 
         print("Starting data collection...")
 
-        # -------------------------
-        # AWS Organization
-        # -------------------------
+        # Organizations
         organizations = boto3.client("organizations")
 
         try:
-            response = organizations.describe_organization()
-
-            landing_zone.organization = response["Organization"]["MasterAccountEmail"]
-
+            org = organizations.describe_organization()
+            landing_zone.organization = org["Organization"]["MasterAccountEmail"]
             print(f"Organization: {landing_zone.organization}")
+        except ClientError as e:
+            print(f"Organization error: {e}")
+            landing_zone.organization = None
 
-        except ClientError as error:
-            print(f"AWS Error: {error}")
-            landing_zone.organization = "Example Organization"
-
-        # -------------------------
-        # AWS Accounts
-        # -------------------------
+        # Accounts
         try:
-            response = organizations.list_accounts()
-
+            resp = organizations.list_accounts()
+            landing_zone.accounts = [a["Name"] for a in resp["Accounts"]]
+            print(f"Accounts: {len(landing_zone.accounts)}")
+        except ClientError as e:
+            print(f"Accounts error: {e}")
             landing_zone.accounts = []
 
-            for account in response["Accounts"]:
-                landing_zone.accounts.append(account["Name"])
-
-            print("AWS Accounts discovered:")
-
-            for account in landing_zone.accounts:
-                print(f" - {account}")
-
-        except ClientError as error:
-            print(f"Unable to retrieve AWS accounts: {error}")
-
-            landing_zone.accounts = [
-                "Management",
-                "Security",
-                "Development",
-                "Production"
-            ]
-
-        # -------------------------
-        # AWS Regions
-        # -------------------------
-        ec2 = boto3.client("ec2", region_name="eu-west-1")
-
+        # Regions
+        ec2 = boto3.client("ec2", region_name="eu-south-1")
         try:
-            response = ec2.describe_regions(AllRegions=False)
-
+            resp = ec2.describe_regions(AllRegions=False)
+            landing_zone.regions = [r["RegionName"] for r in resp["Regions"]]
+            print(f"Regions: {len(landing_zone.regions)}")
+        except ClientError as e:
+            print(f"Regions error: {e}")
             landing_zone.regions = []
 
-            for region in response["Regions"]:
-                landing_zone.regions.append(region["RegionName"])
-
-            print("AWS Regions discovered:")
-
-            for region in landing_zone.regions:
-                print(f" - {region}")
-
-        except ClientError as error:
-            print(f"Unable to retrieve AWS regions: {error}")
-
-            landing_zone.regions = [
-                "eu-west-1",
-                "eu-central-1"
-            ]
-
-        # -------------------------
         # CloudTrail
-        # -------------------------
-        cloudtrail = boto3.client("cloudtrail", region_name="eu-west-1")
-
+        cloudtrail = boto3.client("cloudtrail", region_name="eu-south-1")
         try:
-            trails = cloudtrail.describe_trails()
-
-            if trails["trailList"]:
+            trails = cloudtrail.describe_trails()["trailList"]
+            if trails:
                 landing_zone.add_finding("CloudTrail enabled.")
-
-                print("CloudTrail Trails:")
-
-                for trail in trails["trailList"]:
-                    print(f" - {trail['Name']}")
-
             else:
                 landing_zone.add_finding("CloudTrail not enabled.")
-
-        except ClientError as error:
-            print(f"Unable to retrieve CloudTrail information: {error}")
+        except ClientError:
             landing_zone.add_finding("CloudTrail status unknown.")
 
-        # -------------------------
         # GuardDuty
-        # -------------------------
-        guardduty = boto3.client("guardduty", region_name="eu-west-1")
-
+        guardduty = boto3.client("guardduty", region_name="eu-south-1")
         try:
-            response = guardduty.list_detectors()
-
-            if response["DetectorIds"]:
+            detectors = guardduty.list_detectors()["DetectorIds"]
+            if detectors:
                 landing_zone.add_finding("GuardDuty enabled.")
-
-                print("GuardDuty Detectors:")
-
-                for detector in response["DetectorIds"]:
-                    print(f" - {detector}")
-
             else:
                 landing_zone.add_finding("GuardDuty not enabled.")
-
-        except ClientError as error:
-            print(f"Unable to retrieve GuardDuty information: {error}")
+        except ClientError:
             landing_zone.add_finding("GuardDuty status unknown.")
 
-        # -------------------------
         # Security Hub
-        # -------------------------
-        securityhub = boto3.client("securityhub", region_name="eu-west-1")
-
+        securityhub = boto3.client("securityhub", region_name="eu-south-1")
         try:
             securityhub.describe_hub()
-
             landing_zone.add_finding("Security Hub enabled.")
-            print("Security Hub is enabled.")
-
-        except ClientError as error:
-            print(f"Security Hub not available: {error}")
+        except ClientError:
             landing_zone.add_finding("Security Hub not enabled.")
+
+        # IAM Roles
+        iam = boto3.client("iam")
+        try:
+            resp = iam.list_roles()
+            landing_zone.iam_roles = [r["RoleName"] for r in resp["Roles"]]
+            landing_zone.add_finding(
+                f"IAM Roles discovered: {len(landing_zone.iam_roles)}"
+            )
+        except ClientError:
+            landing_zone.iam_roles = []
+
+        # S3 Buckets
+        s3 = boto3.client("s3")
+        try:
+            resp = s3.list_buckets()
+            landing_zone.buckets = [b["Name"] for b in resp["Buckets"]]
+            landing_zone.add_finding(
+                f"S3 Buckets discovered: {len(landing_zone.buckets)}"
+            )
+        except ClientError:
+            landing_zone.buckets = []
+
+        # EC2 Instances
+        try:
+            resp = ec2.describe_instances()
+            landing_zone.ec2_instances = []
+            for reservation in resp["Reservations"]:
+                for instance in reservation["Instances"]:
+                    landing_zone.ec2_instances.append({
+                        "id": instance["InstanceId"],
+                        "type": instance["InstanceType"],
+                        "state": instance["State"]["Name"],
+                    })
+        except ClientError:
+            landing_zone.ec2_instances = []
+
+        # VPCs
+        try:
+            resp = ec2.describe_vpcs()
+            landing_zone.vpcs = [
+                {
+                    "id": v["VpcId"],
+                    "cidr": v["CidrBlock"],
+                }
+                for v in resp["Vpcs"]
+            ]
+        except ClientError:
+            landing_zone.vpcs = []
+
+        print("Collection completed.")
+        return landing_zone

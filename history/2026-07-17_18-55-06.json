@@ -1,0 +1,60 @@
+{
+    "timestamp": "2026-07-17_18-55-06",
+    "organization": "michele.silves@icloud.com",
+    "accounts": [
+        "SharedServices",
+        "Sandbox",
+        "Network",
+        "Security",
+        "micisilv",
+        "LogArchive",
+        "Development",
+        "Production"
+    ],
+    "regions": [
+        "ap-south-1",
+        "eu-north-1",
+        "eu-west-3",
+        "eu-south-1",
+        "eu-west-2",
+        "eu-west-1",
+        "ap-northeast-3",
+        "ap-northeast-2",
+        "ap-northeast-1",
+        "ca-central-1",
+        "sa-east-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "eu-central-1",
+        "us-east-1",
+        "us-east-2",
+        "us-west-1",
+        "us-west-2"
+    ],
+    "architecture": "Good",
+    "overall_score": 83.0,
+    "fingerprint": {
+        "security": 80,
+        "networking": 80,
+        "identity": 85,
+        "governance": 70,
+        "logging": 100,
+        "architecture": "Good",
+        "overall": 83.0,
+        "hash": "123e72a49615c97cb959c2316c3a0c0021fa2c55c0e2136c953876384e15bede"
+    },
+    "risk_score": 0,
+    "security_score": 80,
+    "network_score": 80,
+    "iam_score": 85,
+    "operations_score": 70,
+    "findings": [
+        "CloudTrail enabled.",
+        "GuardDuty enabled.",
+        "Security Hub enabled.",
+        "IAM Roles discovered: 41",
+        "S3 Buckets discovered: 9"
+    ],
+    "recommendations": [],
+    "forecast": "No Improvement"
+}

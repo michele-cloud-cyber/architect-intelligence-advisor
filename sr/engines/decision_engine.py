@@ -15,6 +15,9 @@ class DecisionEngine:
 
         print("\n========== ARCHITECT DECISION ==========\n")
 
+        if isinstance(risk_score, dict):
+            risk_score = risk_score.get("score", 0)
+
         architecture = landing_zone.fingerprint.get("architecture", "Unknown")
 
         if risk_score >= 70:
@@ -29,24 +32,6 @@ class DecisionEngine:
         print(f"Decision            : {decision}")
         print(f"Recommendations     : {len(landing_zone.recommendations)}")
 
-        print("\nArchitect Summary:")
-
-        if decision == "CRITICAL":
-            print(
-                "The Landing Zone presents significant architectural risks "
-                "that should be remediated immediately."
-            )
-
-        elif decision == "WARNING":
-            print(
-                "The Landing Zone is operational but contains architectural "
-                "weaknesses that should be addressed."
-            )
-
-        else:
-            print(
-                "The Landing Zone follows AWS best practices and no critical "
-                "issues were detected."
-            )
+        landing_zone.decision = decision
 
         return decision

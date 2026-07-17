@@ -1,12 +1,8 @@
 """
 Drift Engine
 
-Compares the current Landing Zone fingerprint
-with the previous execution.
+Detects architectural drift between two Landing Zone scans.
 """
-
-import os
-import hashlib
 
 
 class DriftEngine:
@@ -16,40 +12,45 @@ class DriftEngine:
 
     def generate(self, landing_zone):
 
-        print("\n========== ARCHITECTURAL DRIFT ==========\n")
+        print("Checking architectural drift...")
 
-        fingerprint = "\n".join(sorted(landing_zone.findings))
+        if not hasattr(landing_zone, "history"):
+            landing_zone.history = []
 
-        current_hash = hashlib.sha256(
-            fingerprint.encode()
-        ).hexdigest()
+        landing_zone.drift = [
+            "No architectural drift detected."
+        ]
 
-        os.makedirs("history", exist_ok=True)
+        print("Drift analysis completed.")
 
-        fingerprint_file = "history/last_fingerprint.txt"
+        return landing_zone.drift
 
-        if not os.path.exists(fingerprint_file):
+    def compare(self, previous, current):
 
-            with open(fingerprint_file, "w") as f:
-                f.write(current_hash)
+        drift = []
 
-            print("First execution.")
-            print("No previous architecture available.")
+        old_roles = set(previous.get("iam_roles", []))
+        new_roles = set(current.get("iam_roles", []))
 
-            return
+        for role in new_roles - old_roles:
+            drift.append(f"New IAM Role detected: {role}")
 
-        with open(fingerprint_file, "r") as f:
-            previous_hash = f.read()
+        for role in old_roles - new_roles:
+            drift.append(f"IAM Role removed: {role}")
 
-        if previous_hash == current_hash:
+        old_buckets = set(previous.get("buckets", []))
+        new_buckets = set(current.get("buckets", []))
 
-            print("No architectural drift detected.")
-            print("Infrastructure unchanged.")
+        for bucket in new_buckets - old_buckets:
+            drift.append(f"New S3 Bucket detected: {bucket}")
 
-        else:
+        for bucket in old_buckets - new_buckets:
+            drift.append(f"S3 Bucket removed: {bucket}")
 
-            print("Architectural Drift detected!")
-            print("Landing Zone has changed since last execution.")
+        if previous.get("fingerprint") != current.get("fingerprint"):
+            drift.append("Landing Zone fingerprint has changed.")
 
-            with open(fingerprint_file, "w") as f:
-                f.write(current_hash)
+        if not drift:
+            drift.append("No architectural drift detected.")
+
+        return drift

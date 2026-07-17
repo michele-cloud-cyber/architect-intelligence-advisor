@@ -14,6 +14,10 @@ class ForecastEngine:
 
         print("\n========== ARCHITECT FORECAST ==========\n")
 
+        # Compatibility with the new RiskEngine
+        if isinstance(risk_score, dict):
+            risk_score = risk_score.get("score", 0)
+
         predicted_risk = risk_score
 
         if "GuardDuty enabled." not in landing_zone.findings:
@@ -25,20 +29,16 @@ class ForecastEngine:
         if "CloudTrail enabled." not in landing_zone.findings:
             predicted_risk -= 10
 
-        if predicted_risk < 0:
-            predicted_risk = 0
+        predicted_risk = max(predicted_risk, 0)
 
         improvement = risk_score - predicted_risk
 
         if improvement >= 40:
             trend = "Strong Improvement"
-
         elif improvement >= 20:
             trend = "Moderate Improvement"
-
         elif improvement > 0:
             trend = "Minor Improvement"
-
         else:
             trend = "No Improvement"
 

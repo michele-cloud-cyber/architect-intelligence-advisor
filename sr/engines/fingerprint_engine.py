@@ -5,6 +5,9 @@ Creates a unique architectural fingerprint
 for the Landing Zone.
 """
 
+import hashlib
+import json
+
 
 class FingerprintEngine:
 
@@ -26,18 +29,48 @@ class FingerprintEngine:
             "architecture": "Unknown"
         }
 
+        # -------------------------
         # Security
+        # -------------------------
+
         if "GuardDuty enabled." in findings:
             fingerprint["security"] += 40
 
         if "Security Hub enabled." in findings:
             fingerprint["security"] += 40
 
+        # -------------------------
         # Logging
+        # -------------------------
+
         if "CloudTrail enabled." in findings:
             fingerprint["logging"] = 100
 
-        # Overall score
+        # -------------------------
+        # IAM maturity
+        # -------------------------
+
+        iam_roles = len(getattr(landing_zone, "iam_roles", []))
+
+        if iam_roles > 0:
+            fingerprint["identity"] += 10
+
+        if iam_roles > 50:
+            fingerprint["identity"] -= 10
+
+        # -------------------------
+        # Storage maturity
+        # -------------------------
+
+        bucket_count = len(getattr(landing_zone, "buckets", []))
+
+        if bucket_count > 0:
+            fingerprint["architecture"] = "Managed Storage"
+
+        # -------------------------
+        # Overall Score
+        # -------------------------
+
         overall = (
             fingerprint["security"] +
             fingerprint["networking"] +
@@ -48,7 +81,10 @@ class FingerprintEngine:
 
         fingerprint["overall"] = overall
 
-        # Architecture rating
+        # -------------------------
+        # Architecture Rating
+        # -------------------------
+
         if overall >= 90:
             fingerprint["architecture"] = "Excellent"
         elif overall >= 75:
@@ -58,7 +94,23 @@ class FingerprintEngine:
         else:
             fingerprint["architecture"] = "Poor"
 
-        # Save scores inside Landing Zone
+        # -------------------------
+        # Generate unique fingerprint hash
+        # -------------------------
+
+        payload = json.dumps(
+            fingerprint,
+            sort_keys=True
+        )
+
+        fingerprint["hash"] = hashlib.sha256(
+            payload.encode()
+        ).hexdigest()
+
+        # -------------------------
+        # Save inside Landing Zone
+        # -------------------------
+
         landing_zone.security_score = fingerprint["security"]
         landing_zone.network_score = fingerprint["networking"]
         landing_zone.identity_score = fingerprint["identity"]
@@ -69,6 +121,6 @@ class FingerprintEngine:
         print("Fingerprint generated.")
         print(f"Overall Fingerprint Score: {overall:.1f}")
         print(f"Architecture Rating: {fingerprint['architecture']}")
+        print(f"Fingerprint Hash: {fingerprint['hash']}")
 
         return fingerprint
-

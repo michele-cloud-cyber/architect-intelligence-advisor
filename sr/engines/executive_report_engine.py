@@ -14,6 +14,10 @@ class ExecutiveReportEngine:
 
         print("\n========== EXECUTIVE REPORT ==========\n")
 
+        # Compatibility with the new RiskEngine
+        if isinstance(risk_score, dict):
+            risk_score = risk_score.get("score", 0)
+
         health = max(0, 100 - risk_score)
 
         if health >= 90:
@@ -28,7 +32,7 @@ class ExecutiveReportEngine:
         print(f"Infrastructure Health : {health}%")
         print(f"Architecture Rating   : {status}")
         print(f"Network Score         : {landing_zone.network_score}")
-        print(f"IAM Score : {landing_zone.identity_score}")
+        print(f"IAM Score             : {landing_zone.identity_score}")
         print(f"Operations Score      : {landing_zone.operations_score}")
 
         print("\nExecutive Summary:")
@@ -38,5 +42,9 @@ class ExecutiveReportEngine:
         else:
             print("Infrastructure requires remediation before production.")
 
-        print(f"\nOpen Findings : {len(landing_zone.findings)}")
-        print(f"Recommendations : {len(landing_zone.recommendations)}")
+        print(f"\nOpen Findings      : {len(landing_zone.findings)}")
+        print(f"Recommendations    : {len(landing_zone.recommendations)}")
+
+        landing_zone.executive_status = status
+
+        return status
