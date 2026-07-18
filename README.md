@@ -2,11 +2,9 @@
 
 ## Architecture
 
-<p align="center">
-  <img src="docs/aia-architecture.png" alt="AI Architect Advisor Architecture" width="100%">
-</p>
+![AI Architect Advisor Architecture](docs/aia-architecture.png)
 
-**Figure 1. High-level architecture of AI Architect Advisor.**
+**Figure 1.** High-level architecture of AI Architect Advisor.
 
 > An open-source AI-powered Decision Intelligence Platform for AWS Landing Zones.
 
@@ -38,23 +36,26 @@ Most existing dashboards simply display information.
 
 AI Architect Advisor goes one step further.
 
-Instead of asking engineers to manually interpret dozens of dashboards, AIA explains what is happening, why it matters, what the business impact is, and what actions should be taken.
+Instead of asking engineers to manually interpret dozens of dashboards, AIA explains:
 
-The project demonstrates how Artificial Intelligence can support cloud architecture, governance, operational excellence, security, and FinOps.
+- what is happening;
+- why it matters;
+- what the business impact is;
+- which actions should be taken.
+
+The project demonstrates how Artificial Intelligence can support Cloud Architecture, Governance, Operational Excellence, Security, and FinOps.
 
 ---
 
 # Current Version (V1)
 
-Version 1 introduces the first implementation of the AI Decision Intelligence Engine.
-
 Current capabilities include:
 
-- AWS Organizations analysis
-- IAM analysis
-- CloudTrail analysis
-- GuardDuty analysis
-- Security Hub analysis
+- AWS Organizations Analysis
+- IAM Analysis
+- CloudTrail Analysis
+- GuardDuty Analysis
+- Security Hub Analysis
 - Risk Scoring Engine
 - Priority Engine
 - Recommendation Engine
@@ -63,17 +64,13 @@ Current capabilities include:
 - Historical Snapshot Engine
 - Infrastructure Fingerprinting
 - Streamlit Dashboard
-- Amazon Bedrock integration
+- Amazon Bedrock Integration
 
 ---
 
 # Architecture Overview
 
-The project is composed of multiple independent AI engines.
-
-Each engine performs a specific responsibility inside the decision pipeline.
-
-```text
+```
 AWS Landing Zone
         │
         ▼
@@ -98,14 +95,14 @@ Executive Report Engine
 Bedrock AI Narrator
         │
         ▼
-Streamlit Dashboard
+Dashboard
 ```
 
 ---
 
 # AWS Services
 
-Current integrations include:
+Current integrations:
 
 - AWS Organizations
 - IAM
@@ -114,7 +111,7 @@ Current integrations include:
 - Security Hub
 - Amazon Bedrock
 
-Future versions will integrate additional AWS services.
+Future versions will include additional AWS services.
 
 ---
 
@@ -152,13 +149,13 @@ cd architect-intelligence-advisor
 
 # Run
 
-### CLI
+## CLI
 
 ```bash
 python main.py
 ```
 
-### Dashboard
+## Dashboard
 
 ```bash
 streamlit run dashboard/app.py
@@ -189,7 +186,7 @@ New AI engines and AWS integrations will be continuously added.
 ## Version 3
 
 - Natural Language Chat
-- Multi-account analysis
+- Multi-account Analysis
 - Cost Optimization Advisor
 - Compliance Advisor
 - Architecture Pattern Recognition
