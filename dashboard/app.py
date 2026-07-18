@@ -97,6 +97,97 @@ with col3:
 
 with col4:
     st.metric("Monthly Cost", "$487", "-8%")
+# ==========================================================
+# PRIORITY CENTER
+# ==========================================================
+
+st.divider()
+
+st.subheader("🚨 Priority Center")
+
+critical = []
+high = []
+medium = []
+low = []
+
+for item in getattr(landing_zone, "priorities", []):
+
+    priority = item.get("priority", "").upper()
+
+    if priority == "CRITICAL":
+        critical.append(item)
+
+    elif priority == "HIGH":
+        high.append(item)
+
+    elif priority == "MEDIUM":
+        medium.append(item)
+
+    else:
+        low.append(item)
+
+
+def render_priority(title, color, items):
+
+    if not items:
+        return
+
+    if title == "CRITICAL":
+        box = st.error
+
+    elif title == "HIGH":
+        box = st.warning
+
+    elif title == "MEDIUM":
+        box = st.info
+
+    else:
+        box = st.success
+
+    st.markdown(f"## {color} {title} ({len(items)})")
+
+    for item in items:
+
+        service = item["service"]
+        action = item["action"]
+
+        issue = {
+            "CloudTrail": "Organization Trail is disabled.",
+            "GuardDuty": "Threat detection is disabled.",
+            "Security Hub": "Centralized security findings are unavailable."
+        }.get(service, "Configuration issue detected.")
+
+        impact = {
+            "CloudTrail": "Audit logs are unavailable for incident response.",
+            "GuardDuty": "Threats may remain undetected.",
+            "Security Hub": "Reduced visibility across AWS accounts."
+        }.get(service, "Review this configuration.")
+
+        box(f"""
+### {service}
+
+**Issue**
+
+{issue}
+
+**Business Impact**
+
+{impact}
+
+**Recommended Action**
+
+{action}
+""")
+
+render_priority("CRITICAL", "🔴", critical)
+render_priority("HIGH", "🟠", high)
+render_priority("MEDIUM", "🟡", medium)
+render_priority("LOW", "🟢", low)
+# ==========================================================
+# Fingerprint
+# ==========================================================
+
+
 
 # ==========================================================
 # Fingerprint
@@ -115,8 +206,15 @@ with c1:
 with c2:
     st.metric("Security", fingerprint["security"])
     st.metric("Logging", fingerprint["logging"])
+st.caption("Landing Zone Fingerprint (SHA-256)")
 
-st.code(fingerprint["hash"])
+short_hash = (
+    fingerprint["hash"][:16]
+    + "..."
+    + fingerprint["hash"][-16:]
+)
+
+st.code(short_hash)
 
 # ==========================================================
 # Executive Summary
@@ -127,17 +225,17 @@ st.divider()
 st.subheader("🧠 Executive Summary")
 
 st.info("""
-The AI Architect Advisor analyzed your AWS Landing Zone.
+The AI Architect Advisor completed a comprehensive assessment of your AWS Landing Zone.
 
-Overall posture has improved compared to the previous assessment.
+Overall security posture remains healthy and has improved compared to previous assessments.
 
-✅ Networking posture is healthy after reducing public exposure.
+✅ Network segmentation complies with AWS security best practices.
 
-⚠️ The primary risk has shifted to IAM permissions.
+⚠️ IAM governance remains the primary area requiring remediation.
 
-💰 FinOps analysis shows decreasing EC2 costs but NAT Gateway remains the largest networking expense.
+💰 FinOps analysis indicates decreasing EC2 costs, while NAT Gateway continues to be the largest networking expense.
 
-📈 Forecast indicates the Security Score could improve from 92 to 97 after recommended remediations.
+📈 Predictive analysis estimates the Security Score can improve from **92** to **97** after implementing the recommended remediations.
 """)
 
 # ==========================================================
@@ -164,19 +262,18 @@ st.subheader("🛡️ Landing Zone Health")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("Security")
+    st.write("**Security — 92/100**")
     st.progress(92)
 
-    st.write("Networking")
+    st.write("**Networking — 94/100**")
     st.progress(94)
 
 with col2:
-    st.write("IAM Governance")
+    st.write("**IAM Governance — 73/100**")
     st.progress(73)
 
-    st.write("FinOps")
+    st.write("**FinOps — 81/100**")
     st.progress(81)
-
 # ==========================================================
 # AI Assessment
 # ==========================================================
@@ -214,6 +311,7 @@ st.checkbox("Enable automatic Security Hub remediation")
 st.divider()
 
 st.subheader("💬 AI Advisor")
+st.caption("Amazon Bedrock connected. Conversational assistant available when configured.")
 
 question = st.text_input(
     "Ask something about your Landing Zone"
