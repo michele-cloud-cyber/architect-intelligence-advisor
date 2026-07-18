@@ -5,6 +5,13 @@
 
 ![Architecture](docs/architecture.png)
 
+<p align="center">
+  <img src="docs/aia-architecture.png" alt="AI Architect Advisor Architecture" width="850">
+</p>
+
+<p align="center">
+<b>Figure 1.</b> High-level architecture of AI Architect Advisor.
+</p>
 > An open-source AI-powered Decision Intelligence Platform for AWS Landing Zones.
 
 AI Architect Advisor (AIA) is an intelligent assistant designed to help Cloud Architects understand what is happening inside complex AWS environments.
