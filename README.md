@@ -2,7 +2,7 @@
 
 ## Architecture
 
-![AI Architect Advisor Architecture](docs/aia-architecture.png)
+![Architecture](docs/architecture.png)
 
 **Figure 1.** High-level architecture of AI Architect Advisor.
 
@@ -38,16 +38,18 @@ AI Architect Advisor goes one step further.
 
 Instead of asking engineers to manually interpret dozens of dashboards, AIA explains:
 
-- what is happening;
-- why it matters;
-- what the business impact is;
-- which actions should be taken.
+- What is happening.
+- Why it matters.
+- What the business impact is.
+- Which actions should be taken.
 
 The project demonstrates how Artificial Intelligence can support Cloud Architecture, Governance, Operational Excellence, Security, and FinOps.
 
 ---
 
 # Current Version (V1)
+
+Version 1 introduces the first implementation of the AI Decision Intelligence Engine.
 
 Current capabilities include:
 
@@ -70,7 +72,11 @@ Current capabilities include:
 
 # Architecture Overview
 
-```
+The project is composed of multiple independent AI engines.
+
+Each engine performs a specific responsibility inside the decision pipeline.
+
+```text
 AWS Landing Zone
         │
         ▼
@@ -102,7 +108,7 @@ Dashboard
 
 # AWS Services
 
-Current integrations:
+Current integrations include:
 
 - AWS Organizations
 - IAM
@@ -111,7 +117,7 @@ Current integrations:
 - Security Hub
 - Amazon Bedrock
 
-Future versions will include additional AWS services.
+Future versions will integrate additional AWS services.
 
 ---
 
@@ -181,7 +187,7 @@ New AI engines and AWS integrations will be continuously added.
 - Drift Detection
 - FinOps Advisor
 - Explainability Engine
-- Improved Bedrock prompts
+- Improved Amazon Bedrock prompts
 
 ## Version 3
 
