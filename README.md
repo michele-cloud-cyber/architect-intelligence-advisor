@@ -2,9 +2,8 @@
 
 ## Architecture
 
-<p align="center">
-  <img src="docs/aia-architecture.png" alt="AI Architect Advisor Architecture" width="100%">
-</p>
+
+![Architecture](docs/architecture.png)
 
 > An open-source AI-powered Decision Intelligence Platform for AWS Landing Zones.
 
