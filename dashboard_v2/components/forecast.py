@@ -13,7 +13,8 @@ def render_forecast(report: ForecastReport) -> None:
     st.subheader("Forecast Engine")
     st.caption("Projection for the next assessment, calculated from the available historical trend.")
 
-    columns = st.columns(len(report.forecasts))
+    confidence = _prediction_confidence(report)
+    columns = st.columns(len(report.forecasts) + 1)
     for column, forecast in zip(columns, report.forecasts):
         with column:
             if not forecast.available:
@@ -29,3 +30,15 @@ def render_forecast(report: ForecastReport) -> None:
                 border=True,
             )
             st.caption(f"{forecast.trend} · {forecast.observations} observations")
+
+    with columns[-1]:
+        st.metric("Prediction Confidence", f"{confidence}%", help="Derived from available historical observations.", border=True)
+        st.caption("Historical coverage")
+
+
+def _prediction_confidence(report: ForecastReport) -> int:
+    """Estimate confidence from real history coverage without changing Forecast V1."""
+
+    available = [item for item in report.forecasts if item.available]
+    observations = max((item.observations for item in available), default=0)
+    return min(92, max(25, 42 + min(observations, 10) * 4 + len(available) * 5))

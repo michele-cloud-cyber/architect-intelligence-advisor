@@ -17,6 +17,7 @@ from dashboard_v2.components.charts import (  # noqa: E402
     render_risk_distribution,
     render_trend_line,
 )
+from dashboard_v2.components.assessment_progress import run_assessment_with_progress  # noqa: E402
 from dashboard_v2.components.ai_storytelling import render_ai_storytelling  # noqa: E402
 from dashboard_v2.components.fingerprint import render_fingerprint  # noqa: E402
 from dashboard_v2.components.forecast import render_forecast  # noqa: E402
@@ -27,17 +28,18 @@ from sr.services.dashboard_service import DashboardService  # noqa: E402
 
 
 configure_page()
-run_assessment = render_sidebar()
 
 if "dashboard_service" not in st.session_state:
     st.session_state["dashboard_service"] = DashboardService(PROJECT_ROOT)
 service = st.session_state["dashboard_service"]
+filters, run_assessment = render_sidebar(service.get_filter_options())
 
 if run_assessment:
-    with st.spinner("Running the existing V1 collectors, analyzers and engines..."):
-        st.session_state["v2_current_assessment"] = service.run_assessment()
+    run_assessment_with_progress(service)
+    st.session_state["assessment_completed"] = True
 
-data = st.session_state.get("v2_current_assessment") or service.get_dashboard_data()
+view = service.get_dashboard_view(filters)
+data = view.data
 
 if data is None:
     st.title("Architect Advisor — Version 2")
@@ -47,7 +49,11 @@ if data is None:
     )
     st.stop()
 
-render_header(data.source_label, data.latest_scan_at)
+if st.session_state.pop("assessment_completed", False):
+    st.success("Assessment completed successfully")
+
+render_header(data.source_label, data.latest_scan_at, data.assessment_summary)
+st.caption(f"Selected scope contains {view.filtered_snapshot_count} historical snapshots.")
 
 render_kpi_cards(data.metrics)
 st.divider()
@@ -71,18 +77,19 @@ with st.container(border=True):
     render_trend_line(data)
 
 st.divider()
-render_timeline(service.get_timeline())
+render_timeline(view.timeline)
 
 st.divider()
-render_fingerprint(service.get_fingerprint_report())
+render_fingerprint(view.fingerprint)
 
 st.divider()
-render_forecast(service.get_forecast_report())
+render_forecast(view.forecast)
 
 st.divider()
-render_ai_storytelling(service.get_ai_storytelling_status(), service.generate_ai_storytelling)
-
-st.info(
-    "The dashboard uses existing V1 assessment outputs. FinOps and Compliance remain N/A "
-    "until dedicated V2 engines add those metrics to the assessment history."
+render_ai_storytelling(
+    service.get_ai_storytelling_status(filters),
+    lambda: service.generate_demo_storytelling(filters),
+    lambda: service.generate_ai_storytelling(filters),
 )
+
+st.info("The dashboard uses existing V1 assessment outputs. FinOps and Compliance are available after multiple assessments.")

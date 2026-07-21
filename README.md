@@ -170,6 +170,10 @@ streamlit run app.py
 The V2 interface is the primary application. The V1 collector, analyzer, engines,
 Bedrock integration and history remain the internal assessment engine.
 
+The enterprise dashboard provides real-history filtering by organization, AWS account,
+and region, a compact expandable Landing Zone Timeline, an explicit V1 scan workflow,
+and local or Bedrock-backed AI Storytelling.
+
 ---
 
 # Current Status
