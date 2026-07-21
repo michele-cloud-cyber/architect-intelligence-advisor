@@ -1,10 +1,10 @@
 {
-    "security": 80,
+    "security": 0,
     "networking": 80,
     "identity": 85,
     "governance": 70,
-    "logging": 100,
-    "architecture": "Good",
-    "overall": 83.0,
-    "hash": "123e72a49615c97cb959c2316c3a0c0021fa2c55c0e2136c953876384e15bede"
+    "logging": 0,
+    "architecture": "Poor",
+    "overall": 47.0,
+    "hash": "01ec48098c1a5d3a568c319533694ad4df9748adf150f38fa1dc2a7f9715687d"
 }

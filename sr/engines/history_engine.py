@@ -7,16 +7,21 @@ Stores every analysis performed by AIA.
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 
 
 class HistoryEngine:
 
-    def __init__(self):
+    def __init__(self, history_directories=None, write_directory=None):
         print("History Engine initialized.")
+        self.history_directories = [
+            Path(directory) for directory in (history_directories or ["history"])
+        ]
+        self.write_directory = Path(write_directory) if write_directory else self.history_directories[0]
 
     def save(self, landing_zone, risk_score):
 
-        os.makedirs("history", exist_ok=True)
+        os.makedirs(self.write_directory, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
@@ -42,38 +47,49 @@ class HistoryEngine:
             "forecast": landing_zone.forecast
         }
 
-        filename = f"history/{timestamp}.json"
+        filename = self.write_directory / f"{timestamp}.json"
 
         with open(filename, "w") as file:
             json.dump(report, file, indent=4)
 
-        with open("history/last_fingerprint.txt", "w") as file:
+        with open(self.write_directory / "last_fingerprint.txt", "w") as file:
             file.write(json.dumps(landing_zone.fingerprint, indent=4))
 
         print("\nHistory saved:")
         print(filename)
 
-        return filename
+        return str(filename)
 
     def load_last_report(self):
 
-        if not os.path.exists("history"):
+        reports = self.load_reports()
+        if not reports:
             return None
+        return reports[-1]
 
-        files = [
-            f for f in os.listdir("history")
-            if f.endswith(".json")
-        ]
+    def load_reports(self):
+        """Load valid snapshots from configured directories, oldest first.
 
-        if not files:
-            return None
+        The default remains the legacy ``history`` location. Multiple locations
+        are used by the internal application API to preserve V1 archives.
+        """
 
-        files.sort()
+        reports = []
+        for directory in self.history_directories:
+            if not directory.exists():
+                continue
+            for filename in sorted(directory.glob("*.json")):
+                try:
+                    with open(filename, "r") as file:
+                        report = json.load(file)
+                    if not isinstance(report, dict):
+                        continue
+                    reports.append(report)
+                except (OSError, json.JSONDecodeError):
+                    continue
 
-        latest = files[-1]
-
-        with open(f"history/{latest}", "r") as file:
-            return json.load(file)
+        reports.sort(key=lambda report: str(report.get("timestamp", "")))
+        return reports
 
     def compare(self, current_report):
 

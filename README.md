@@ -164,8 +164,11 @@ python main.py
 ## Dashboard
 
 ```bash
-streamlit run dashboard/app.py
+streamlit run app.py
 ```
+
+The V2 interface is the primary application. The V1 collector, analyzer, engines,
+Bedrock integration and history remain the internal assessment engine.
 
 ---
 
