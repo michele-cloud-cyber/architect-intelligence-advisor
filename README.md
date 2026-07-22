@@ -1,80 +1,123 @@
-# AI Architect Advisor (AIA)
+# 🏗️ AI Architect Advisor (AIA)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Amazon Bedrock](https://img.shields.io/badge/Amazon-Bedrock-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AI](https://img.shields.io/badge/AI-Decision%20Intelligence-6A5ACD?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-2.0-blue?style=for-the-badge)
+> **An Open-Source AI-powered Decision Intelligence Platform for AWS Landing Zones**
 
-## Architecture
+AI Architect Advisor (AIA) is an intelligent decision-support platform designed to help Cloud Architects understand, analyze, and improve complex AWS Landing Zones.
+
+Instead of simply displaying AWS findings, AIA correlates cloud telemetry from multiple AWS services, calculates architectural risk, prioritizes remediation actions, predicts future posture, and generates AI-powered executive recommendations.
+
+The platform combines traditional cloud assessment techniques with Artificial Intelligence to transform raw infrastructure data into actionable architectural intelligence.
+
+---
+
+## ✨ Key Features
+
+- 🔍 Multi-service AWS analysis
+- 📊 Enterprise Streamlit Dashboard
+- 📈 Historical posture tracking
+- 🔮 Forecast Engine
+- 🤖 AI Storytelling (Local & Amazon Bedrock)
+- 🛡️ Security Findings Investigation
+- 📅 Landing Zone Timeline
+- 🎯 Risk Prioritization Engine
+- 🧠 Infrastructure Fingerprinting
+- 📄 Executive Report Generation
+
+---
+
+# 🏛️ High-Level Architecture
 
 ![Architecture](docs/architecture.png)
 
 **Figure 1.** High-level architecture of AI Architect Advisor.
 
-> An open-source AI-powered Decision Intelligence Platform for AWS Landing Zones.
+The platform continuously analyzes AWS Landing Zone telemetry, processes cloud events through multiple AI decision engines, and produces actionable recommendations for Cloud Architects.
 
-AI Architect Advisor (AIA) is an intelligent assistant designed to help Cloud Architects understand what is happening inside complex AWS environments.
+The architecture is composed of four major layers:
 
-Instead of simply collecting AWS findings, AIA analyzes cloud telemetry, correlates information from multiple AWS services, explains architectural risks, prioritizes remediation actions, and generates executive-level recommendations using Artificial Intelligence.
+- **User Interface** – Enterprise Streamlit Dashboard
+- **AI Advisor Engines** – Collection, Analysis, Risk, Prioritization, Decision and History
+- **AWS Environment** – Organizations, IAM, CloudTrail, GuardDuty, Security Hub and additional AWS services
+- **AI Services** – Amazon Bedrock for executive-level narratives and recommendations
+- ## 🖥️ Dashboard Overview
 
-The objective is to transform raw cloud data into actionable architectural intelligence.
+The Enterprise Dashboard provides Cloud Architects with a centralized view of AWS Landing Zone health, historical posture, risk distribution, compliance metrics, and executive KPIs.
 
----
+It allows engineers to quickly understand the current architectural status before investigating individual findings.
 
-# Vision
-
-Modern AWS Landing Zones generate thousands of events every day.
-
-Cloud Architects often need to analyze information coming from multiple AWS services before making a decision.
-
-This process is time-consuming, repetitive, and requires deep knowledge of cloud architecture.
-
-AI Architect Advisor was created to become an intelligent architectural advisor capable of understanding the overall state of an AWS environment, identifying risks, explaining infrastructure behavior, and supporting technical decision making.
-
-Rather than replacing Cloud Architects, AIA is designed to augment their capabilities.
+![Dashboard Overview](docs/images/dashboard-overview.jpeg)
 
 ---
 
-# Why this project?
+## 🔮 Forecast Engine
 
-Most existing dashboards simply display information.
+The Forecast Engine predicts the expected evolution of the AWS Landing Zone by analyzing historical assessment snapshots.
 
-AI Architect Advisor goes one step further.
+It estimates future Risk Score, Security Score, Compliance trends, FinOps readiness, and prediction confidence, enabling proactive decision making instead of reactive operations.
 
-Instead of asking engineers to manually interpret dozens of dashboards, AIA explains:
-
-- What is happening.
-- Why it matters.
-- What the business impact is.
-- Which actions should be taken.
-
-The project demonstrates how Artificial Intelligence can support Cloud Architecture, Governance, Operational Excellence, Security, and FinOps.
+![Forecast Engine](docs/images/dashboard-forecast.jpeg)
 
 ---
 
-# Current Version (V1)
+## 🤖 AI Storytelling
 
-Version 1 introduces the first implementation of the AI Decision Intelligence Engine.
+AI Storytelling converts historical assessment data into executive-level narratives.
 
-Current capabilities include:
+The engine supports both:
 
-- AWS Organizations Analysis
-- IAM Analysis
-- CloudTrail Analysis
-- GuardDuty Analysis
-- Security Hub Analysis
-- Risk Scoring Engine
-- Priority Engine
-- Recommendation Engine
-- Executive Report Generator
-- AI Narrative Generation
-- Historical Snapshot Engine
-- Infrastructure Fingerprinting
-- Streamlit Dashboard
-- Amazon Bedrock Integration
+- Local AI mode (offline demonstration)
+- Amazon Bedrock integration
+
+Instead of presenting raw metrics, the platform explains posture evolution, architectural changes, and recommended remediation priorities in natural language.
+
+![AI Storytelling](docs/images/ai-storytelling.jpeg)
 
 ---
 
-# Architecture Overview
+## 📅 Landing Zone Timeline
 
-The project is composed of multiple independent AI engines.
+The Landing Zone Timeline provides a chronological history of infrastructure changes and assessment results.
 
-Each engine performs a specific responsibility inside the decision pipeline.
+Each event captures architectural modifications, posture variations, detected findings, and risk evolution, allowing Cloud Architects to understand how an AWS environment changes over time.
+
+![Landing Zone Timeline](docs/images/landing-zone-timeline.jpeg)
+
+---
+
+## 🛡️ Security Findings
+
+The Security Findings module correlates evidence collected from AWS security services into a structured investigation report.
+
+Each finding includes:
+
+- Executive summary
+- Technical impact
+- Business impact
+- Severity classification
+- Confidence score
+- Timeline
+- Supporting evidence
+
+The objective is to transform raw security alerts into actionable architectural intelligence.
+
+![Security Findings](docs/images/security-findings.jpeg)
+
+---
+
+---
+
+# 🚀 Dashboard Showcase
+
+Version 2 introduces a completely redesigned enterprise dashboard focused on historical analysis, executive visibility, forecasting, AI-assisted decision making and security investigations.
+# ⚙️ AI Decision Pipeline
+
+AI Architect Advisor follows a modular decision pipeline designed to transform raw AWS telemetry into actionable architectural recommendations.
 
 ```text
 AWS Landing Zone
@@ -98,52 +141,67 @@ Recommendation Engine
 Executive Report Engine
         │
         ▼
-Bedrock AI Narrator
+AI Storytelling (Local / Amazon Bedrock)
         │
         ▼
-Dashboard
+Enterprise Dashboard
 ```
+
+Each stage has a dedicated responsibility, making the platform modular, extensible, and easy to evolve.
 
 ---
 
-# AWS Services
+# ☁️ Supported AWS Services
 
 Current integrations include:
 
 - AWS Organizations
-- IAM
-- CloudTrail
-- GuardDuty
-- Security Hub
+- AWS IAM
+- Amazon CloudTrail
+- Amazon GuardDuty
+- AWS Security Hub
 - Amazon Bedrock
 
-Future versions will integrate additional AWS services.
+The architecture has been designed to support future integrations with additional AWS services such as AWS Config, Inspector, Access Analyzer, Macie, Detective, and Cost Explorer.
 
 ---
 
-# Project Structure
+# 📂 Project Structure
 
 ```text
-dashboard/
-docs/
-history/
-src/
-├── analyzers/
-├── collectors/
-├── config/
-├── engines/
-├── models/
-├── services/
-└── utils/
-
-main.py
-README.md
-LICENSE
+architect-intelligence-advisor/
+│
+├── dashboard_v2/
+│   ├── app.py
+│   ├── components/
+│   └── modules/
+│
+├── docs/
+│   ├── architecture.png
+│   └── images/
+│
+├── history/
+│
+├── src/
+│   ├── analyzers/
+│   ├── collectors/
+│   ├── config/
+│   ├── engines/
+│   ├── models/
+│   ├── services/
+│   └── utils/
+│
+├── tests/
+├── README.md
+├── LICENSE
+└── requirements.txt
 ```
 
 ---
 
-# Installation
+# 🚀 Installation
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/michele-cloud-cyber/architect-intelligence-advisor.git
@@ -151,75 +209,121 @@ git clone https://github.com/michele-cloud-cyber/architect-intelligence-advisor.
 cd architect-intelligence-advisor
 ```
 
----
-
-# Run
-
-## CLI
+Install the required dependencies:
 
 ```bash
-python main.py
+pip install -r requirements.txt
 ```
 
-## Dashboard
+---
+
+# ▶️ Running the Application
+
+### Launch the Enterprise Dashboard
 
 ```bash
-streamlit run app.py
+streamlit run dashboard_v2/app.py
 ```
 
-The V2 interface is the primary application. The V1 collector, analyzer, engines,
-Bedrock integration and history remain the internal assessment engine.
+The V2 dashboard is the primary user interface for AI Architect Advisor.
 
-The enterprise dashboard provides real-history filtering by organization, AWS account,
-and region, a compact expandable Landing Zone Timeline, an explicit V1 scan workflow,
-and local or Bedrock-backed AI Storytelling.
+The original V1 assessment engine remains responsible for:
+
+- Data collection
+- AWS analysis
+- Risk evaluation
+- Historical snapshots
+- AI Storytelling
+- Recommendation generation
+
+while Version 2 provides the enterprise visualization layer with historical analytics, forecasting, and security investigation capabilities.
+# 🚧 Current Status
+
+AI Architect Advisor is under active development.
+
+The project has evolved from a proof-of-concept into an enterprise-oriented Decision Intelligence Platform for AWS Landing Zones.
+
+Current development focuses on:
+
+- Historical assessment analysis
+- AI-assisted decision support
+- Forecasting capabilities
+- Executive reporting
+- Security investigation workflows
+- Enterprise dashboard experience
 
 ---
 
-# Current Status
+# 🗺️ Roadmap
 
-Project under active development.
+## Version 2 (Current)
 
-This repository represents Version 1 (MVP).
-
-New AI engines and AWS integrations will be continuously added.
+- ✅ Enterprise Streamlit Dashboard
+- ✅ Historical Assessment Engine
+- ✅ Landing Zone Timeline
+- ✅ Infrastructure Fingerprinting
+- ✅ Forecast Engine
+- ✅ AI Storytelling
+- ✅ Security Findings Investigation
+- ✅ Amazon Bedrock Integration
+- ✅ Risk Prioritization Engine
 
 ---
-
-# Roadmap
-
-## Version 2
-
-- Forecast Engine
-- Drift Detection
-- FinOps Advisor
-- Explainability Engine
-- Improved Amazon Bedrock prompts
 
 ## Version 3
 
-- Natural Language Chat
-- Multi-account Analysis
-- Cost Optimization Advisor
+Planned features include:
+
+- Natural Language Chat Assistant
+- Multi-account assessment engine
+- Multi-region intelligence
+- FinOps Advisor
 - Compliance Advisor
+- Cost Optimization Advisor
 - Architecture Pattern Recognition
+- Explainability Engine
+- Interactive Recommendations
+- AI Decision Memory
 
 ---
 
-# Future Vision
+## Long-Term Vision
 
-The long-term goal of AI Architect Advisor is to become an intelligent architectural companion capable of understanding the complete health of an AWS Landing Zone, explaining infrastructure behavior, predicting future risks, and supporting Cloud Architects during strategic decision making.
+The long-term vision of AI Architect Advisor is to become an intelligent architectural companion capable of understanding the complete operational state of an AWS Landing Zone.
 
----
+Rather than simply reporting findings, the platform aims to reason about infrastructure, explain architectural behavior, predict future risks, and assist Cloud Architects during strategic decision-making.
 
-# License
-
-MIT License.
+Future releases will expand support for additional AWS services, advanced AI reasoning, governance, compliance, FinOps, and autonomous architectural recommendations.
 
 ---
 
-# Contributing
+# 🤝 Contributing
 
-Pull Requests are welcome.
+Contributions are welcome!
 
-Suggestions, ideas, and architectural discussions are always appreciated.
+If you have ideas for new AWS integrations, AI capabilities, dashboard improvements, or architectural enhancements, feel free to open an issue or submit a Pull Request.
+
+Community feedback is highly appreciated and helps shape the future of the project.
+
+---
+
+# 📄 License
+
+This project is released under the **MIT License**.
+
+See the `LICENSE` file for additional details.
+
+---
+
+# 👨‍💻 Author
+
+**Michele**
+
+Cloud Security • AWS • Artificial Intelligence • Decision Intelligence
+
+GitHub:
+https://github.com/michele-cloud-cyber
+
+---
+
+⭐ If you find this project useful, consider giving it a **Star** on GitHub to support its development.
