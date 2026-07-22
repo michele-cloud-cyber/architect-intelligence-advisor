@@ -18,7 +18,7 @@ def render_kpi_cards(metrics: DashboardMetrics) -> None:
     )
     for column, (label, value, help_text) in zip(st.columns(4), cards):
         with column:
-            display_value = f"{value:.0f}/100" if value is not None else "Coming Soon"
+            display_value = f"{value:.0f}/100" if value is not None else "—"
             st.metric(label, display_value, help=help_text, border=True)
             if value is None:
                 st.caption("Available after multiple assessments")

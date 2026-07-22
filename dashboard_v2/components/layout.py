@@ -14,15 +14,29 @@ def configure_page() -> None:
     st.markdown(
         """
         <style>
-        .stApp { background: #0b1420; }
+        .stApp {
+          background: #0b1420;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        [data-testid="stMain"] {
+          display: block !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+        }
         [data-testid="stSidebar"] { background: #101c2b; border-right: 1px solid #25374d; }
         [data-testid="stMetric"] { background: #111f30; border: 1px solid #2a415b; border-radius: 12px;
-          padding: 14px; animation: aa-fade-slide .28s ease-out; }
+          padding: 14px; animation: none !important; transform: none !important;
+          opacity: 1 !important; visibility: visible !important; }
         [data-testid="stMetricValue"] { color: #e8f1fb; }
         [data-testid="stVerticalBlockBorderWrapper"] { border-color: #2a415b; border-radius: 12px; }
-        .aa-enter { animation: aa-fade-slide .25s ease-out; }
-        @keyframes aa-fade-slide { from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); } }
+        .aa-enter {
+          animation: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,

@@ -23,6 +23,7 @@ from dashboard_v2.components.fingerprint import render_fingerprint  # noqa: E402
 from dashboard_v2.components.forecast import render_forecast  # noqa: E402
 from dashboard_v2.components.kpi_cards import render_kpi_cards  # noqa: E402
 from dashboard_v2.components.layout import configure_page, render_header, render_sidebar  # noqa: E402
+from dashboard_v2.components.security_findings import render_security_findings  # noqa: E402
 from dashboard_v2.components.timeline import render_timeline  # noqa: E402
 from sr.services.dashboard_service import DashboardService  # noqa: E402
 
@@ -91,5 +92,8 @@ render_ai_storytelling(
     lambda: service.generate_demo_storytelling(filters),
     lambda: service.generate_ai_storytelling(filters),
 )
+
+st.divider()
+render_security_findings(service.get_demo_security_case())
 
 st.info("The dashboard uses existing V1 assessment outputs. FinOps and Compliance are available after multiple assessments.")

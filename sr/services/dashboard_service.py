@@ -171,6 +171,15 @@ class DashboardService:
     def simulate_what_if(self) -> CapabilityStatus:
         return CapabilityStatus("What-if Simulator", False, "What-if simulation is not implemented yet.")
 
+    def get_demo_security_case(self):
+        """Return the isolated demo dossier without touching V1 history or AWS."""
+
+        from v2.modules.security_findings.repository import SecurityFindingsRepository
+        from v2.modules.security_findings.service import build_demo_security_case
+
+        repository = SecurityFindingsRepository(self.project_root)
+        return build_demo_security_case(repository.list_case_ids())
+
     def _latest_snapshot(self, filters: DashboardFilters | None = None) -> dict[str, Any] | None:
         history = self._filter_history(filters)
         return history[-1] if history else None
