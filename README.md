@@ -23,6 +23,9 @@ Current capabilities include:
 - Security Findings dossier with correlation, attack path, evidence locker,
   explainable risk, timeline, and narrative
 - Importer contracts for Security Hub, Inspector, Nessus, Nmap, and OpenVAS
+- Interactive AWS Lab Phase 1 with project design, transparent scoring,
+  deterministic before/after simulation, secure S3 Terraform generation,
+  local Policy as Code checks, and a non-published CI/CD example
 
 The Security Findings UI currently uses an isolated deterministic demo dossier.
 Importer interfaces are present, while live ingestion from the declared sources is
@@ -109,6 +112,10 @@ Start the V2 dashboard from the repository root:
 ```bash
 streamlit run app.py
 ```
+
+The application opens on **Interactive AWS Lab**. Use the Workspace selector to
+return to the existing **Advisor Dashboard**. Demo and Simulation modes are local;
+AWS Read-only is reserved for a future explicitly authorized connector.
 
 The dashboard loads the compatible snapshots already stored in `history/` and
 `sr/history/`. The **Run assessment** action uses the V1 AWS pipeline and therefore

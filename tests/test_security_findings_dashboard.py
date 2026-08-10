@@ -22,6 +22,9 @@ class SecurityFindingsDashboardTests(unittest.TestCase):
     def test_dashboard_renders_security_findings_section(self) -> None:
         app = AppTest.from_file(APP_PATH)
         app.run(timeout=30)
+        workspace = next(item for item in app.radio if item.label == "Workspace")
+        workspace.set_value("Advisor Dashboard")
+        app.run(timeout=30)
 
         self.assertFalse(app.exception)
         self.assertIn("Security Findings", [item.value for item in app.subheader])

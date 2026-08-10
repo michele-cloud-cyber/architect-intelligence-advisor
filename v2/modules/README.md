@@ -11,6 +11,7 @@ rather than dashboard internals.
 | `landing_zone_timeline` | Chronological infrastructure and assessment events | Available |
 | `fingerprint_engine` | Versioned architectural fingerprinting | Available |
 | `security_findings` | Correlated security dossier and explainable risk | Demo MVP |
+| `platform_lab` | Project design, scoring, simulation and secure S3 Terraform slice | Phase 1 available |
 | `finops_dashboard` | Cost, efficiency and FinOps metrics | Planned |
 | `recommendation_engine` | Prioritized remediation backlog | Planned |
 | `what_if_simulator` | Safe remediation impact simulation | Planned |

@@ -25,10 +25,22 @@ from dashboard_v2.components.kpi_cards import render_kpi_cards  # noqa: E402
 from dashboard_v2.components.layout import configure_page, render_header, render_sidebar  # noqa: E402
 from dashboard_v2.components.security_findings import render_security_findings  # noqa: E402
 from dashboard_v2.components.timeline import render_timeline  # noqa: E402
+from dashboard_v2.components.platform_lab import render_platform_lab  # noqa: E402
 from sr.services.dashboard_service import DashboardService  # noqa: E402
 
 
 configure_page()
+
+workspace = st.sidebar.radio(
+    "Workspace",
+    ["Advisor Dashboard", "Interactive AWS Lab"],
+    index=1,
+    key="workspace_navigation",
+)
+
+if workspace == "Interactive AWS Lab":
+    render_platform_lab()
+    st.stop()
 
 if "dashboard_service" not in st.session_state:
     st.session_state["dashboard_service"] = DashboardService(PROJECT_ROOT)
