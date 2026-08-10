@@ -117,6 +117,42 @@ The application opens on **Interactive AWS Lab**. Use the Workspace selector to
 return to the existing **Advisor Dashboard**. Demo and Simulation modes are local;
 AWS Read-only is reserved for a future explicitly authorized connector.
 
+## Streamlit Community Cloud
+
+The public build is intentionally **demo-only**: AWS assessment actions and Amazon
+Bedrock calls are disabled. It does not require or read AWS credentials.
+
+Run the exact cloud entry point locally from the repository root:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+To deploy after pushing the repository to GitHub:
+
+1. Open [Streamlit Community Cloud](https://share.streamlit.io/) and sign in.
+2. Select **Create app** and **Yup, I have an app**.
+3. Select the GitHub repository and branch containing this version.
+4. Set **Main file path** to `streamlit_app.py`.
+5. In **Advanced settings**, select Python 3.12.
+6. Leave **Secrets** empty; this demo requires none.
+7. Choose the app subdomain and select **Deploy**.
+
+Community Cloud executes the application from the repository root. Runtime
+dependencies are pinned in `requirements.txt`, and UI configuration is stored in
+`.streamlit/config.toml`. Do not upload local virtual environments, `.env` files,
+Terraform state, plans, credentials, private keys, or `.streamlit/secrets.toml`.
+
+### Files required in GitHub
+
+- `streamlit_app.py`, `requirements.txt`, `.streamlit/config.toml`
+- `dashboard_v2/`, `v2/`, and `sr/`
+- the bundled demo snapshots in `sr/history/` and `history/last_fingerprint.txt`
+- `README.md`, `LICENSE`, and optionally `docs/` and `tests/`
+
+The root `app.py` remains a compatible local entry point, but Community Cloud should
+use `streamlit_app.py`.
+
 The dashboard loads the compatible snapshots already stored in `history/` and
 `sr/history/`. The **Run assessment** action uses the V1 AWS pipeline and therefore
 requires valid AWS credentials and permissions.

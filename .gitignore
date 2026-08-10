@@ -1,9 +1,46 @@
 __pycache__/
 *.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 history/*.json
 
 .venv/
 venv/
+.cloud-venv/
 
 .env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Credentials and private keys must never be committed.
+credentials
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Terraform runtime artifacts and environment values.
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+tfplan
+*.tfplan
+
+# Local OS/editor files.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local visual verification artifacts (published screenshots live elsewhere in docs).
+docs/phase1-live/
+docs/preview/

@@ -60,7 +60,7 @@ def render_header(source_label: str, latest_scan_at: datetime | None, summary: A
     st.divider()
 
 
-def render_sidebar(options: DashboardFilterOptions) -> tuple[DashboardFilters, bool]:
+def render_sidebar(options: DashboardFilterOptions, demo_only: bool = False) -> tuple[DashboardFilters, bool]:
     with st.sidebar:
         st.header("Architect Advisor")
         st.caption("Enterprise Landing Zone Intelligence")
@@ -79,7 +79,15 @@ def render_sidebar(options: DashboardFilterOptions) -> tuple[DashboardFilters, b
             st.caption("No Regions available · Connect AWS first")
         st.caption("Filters scope the historical snapshots displayed in the dashboard.")
         st.divider()
-        run_assessment = st.button("Start Assessment", type="primary", use_container_width=True)
+        run_assessment = st.button(
+            "Start Assessment",
+            type="primary",
+            use_container_width=True,
+            disabled=demo_only,
+            help="Disabled in the public demo deployment." if demo_only else None,
+        )
+        if demo_only:
+            st.caption("Public demo: AWS collection is disabled.")
         return (
             DashboardFilters(
                 organization=organization if organization in options.organizations else None,
