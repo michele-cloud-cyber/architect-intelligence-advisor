@@ -3,12 +3,14 @@ AI Architect Advisor - Demo locale per Windows
 
 Contenuto
 ---------
-Questa distribuzione include soltanto il laboratorio dimostrativo locale:
+Questa distribuzione include la foundation dimostrativa multi-cloud locale:
+panoramica AWS/Azure/GCP con dati sintetici, modello comune, scenari locali,
+Governance Control Plane, orchestratore e registro plugin. Rimangono disponibili
 Project Designer, scoring, simulazione S3, generazione Terraform in memoria,
 controlli Policy as Code ed esempio CI/CD.
 
 Non contiene credenziali, account reali, state Terraform, access key o connettori
-AWS. Non esegue terraform apply e non modifica infrastrutture.
+cloud. Non usa SDK cloud, non esegue terraform apply e non modifica infrastrutture.
 
 Requisiti
 ---------

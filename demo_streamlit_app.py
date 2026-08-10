@@ -2,11 +2,11 @@
 
 import streamlit as st
 
-from dashboard_v2.components.platform_lab import render_platform_lab
+from dashboard_v2.components.multicloud_foundation import render_multicloud_platform
 
 
 st.set_page_config(
-    page_title="AWS Interactive Architecture Lab",
+    page_title="Adaptive Multi-Cloud Landing Zone Orchestrator",
     page_icon="🧭",
     layout="wide",
 )
@@ -26,4 +26,4 @@ with st.sidebar:
     st.header("Architect Advisor")
     st.success("LOCAL DEMO / DEMO LOCALE · NO AWS CONNECTION")
 
-render_platform_lab()
+render_multicloud_platform()
