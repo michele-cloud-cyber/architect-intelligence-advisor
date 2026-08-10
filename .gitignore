@@ -44,3 +44,4 @@ Thumbs.db
 # Local visual verification artifacts (published screenshots live elsewhere in docs).
 docs/phase1-live/
 docs/preview/
+/dist/
