@@ -24,7 +24,6 @@ st.markdown(
 
 with st.sidebar:
     st.header("Architect Advisor")
-    st.success("DEMO LOCALE · Nessuna connessione AWS")
-    st.caption("Dati fittizi e simulazioni deterministiche eseguite esclusivamente in locale.")
+    st.success("LOCAL DEMO / DEMO LOCALE · NO AWS CONNECTION")
 
 render_platform_lab()

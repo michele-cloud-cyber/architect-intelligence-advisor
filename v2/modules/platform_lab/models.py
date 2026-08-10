@@ -56,6 +56,9 @@ class ControlDefinition:
     terraform_mapping: str
     test_id: str
     estimated_monthly_cost: str = "$0"
+    likelihood: int = 1
+    impact: int = 1
+    residual_score: int = 88
 
 
 @dataclass(frozen=True)
@@ -95,12 +98,20 @@ class SimulationResult:
     confidence: int
     contributions: tuple[dict[str, Any], ...]
     proposed_configuration: dict[str, bool | str]
+    technical_before: int
+    technical_after: int
+    maturity_before: int
+    maturity_after: int
+    input_quality: int
 
 
 @dataclass(frozen=True)
 class TerraformPackage:
     files: dict[str, str]
     decision_summary: dict[str, Any]
+    diff: str = ""
+    mappings: tuple[dict[str, str], ...] = ()
+    resource_explanations: tuple[dict[str, str], ...] = ()
 
 
 @dataclass(frozen=True)

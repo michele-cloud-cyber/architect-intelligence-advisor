@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+from difflib import unified_diff
+from io import BytesIO
+from zipfile import ZIP_DEFLATED, ZipFile
+
 from v2.modules.platform_lab.models import ProjectDefinition, SimulationResult, TerraformPackage
 
 
-def generate_s3_package(project: ProjectDefinition, simulation: SimulationResult) -> TerraformPackage:
+def generate_s3_package(project: ProjectDefinition, simulation: SimulationResult, language: str = "en") -> TerraformPackage:
     files = {
         "versions.tf": '''terraform {
   required_version = ">= 1.6.0"
@@ -46,6 +50,25 @@ log_bucket_name = "replace-with-unique-log-bucket-name"
 ''',
         "tests/s3_security.tftest.hcl": _test_hcl(),
     }
+    mappings = (
+        {"control": "S3-PUB-001", "terraform": "aws_s3_bucket_public_access_block.workload", "test": "test_public_access_block"},
+        {"control": "S3-ENC-001", "terraform": "aws_s3_bucket_server_side_encryption_configuration.workload", "test": "test_default_encryption"},
+        {"control": "S3-VER-001", "terraform": "aws_s3_bucket_versioning.workload", "test": "test_versioning_enabled"},
+        {"control": "S3-LOG-001", "terraform": "aws_s3_bucket_logging.workload", "test": "test_access_logging"},
+        {"control": "S3-TLS-001", "terraform": "aws_s3_bucket_policy.require_tls", "test": "test_tls_policy"},
+        {"control": "S3-LCY-001", "terraform": "aws_s3_bucket_lifecycle_configuration.workload", "test": "test_lifecycle_rule"},
+    )
+    it = language == "it"
+    explanations = (
+        {"resource": "aws_s3_bucket.workload", "explanation": "Bucket applicativo senza eliminazione forzata." if it else "Workload bucket with force deletion disabled."},
+        {"resource": "aws_s3_bucket_public_access_block.workload", "explanation": "Blocca ACL e policy pubbliche." if it else "Blocks public ACLs and bucket policies."},
+        {"resource": "aws_s3_bucket_server_side_encryption_configuration.workload", "explanation": "Applica cifratura AES256 predefinita." if it else "Applies default AES256 encryption."},
+        {"resource": "aws_s3_bucket_versioning.workload", "explanation": "Conserva versioni per il recupero." if it else "Retains versions for recovery."},
+        {"resource": "aws_s3_bucket_logging.workload", "explanation": "Invia access log a un bucket separato." if it else "Sends access logs to a separate bucket."},
+        {"resource": "aws_s3_bucket_policy.require_tls", "explanation": "Nega richieste senza TLS." if it else "Denies requests without TLS."},
+    )
+    previous = _baseline_tf(project.configuration)
+    diff = "".join(unified_diff(previous.splitlines(True), files["main.tf"].splitlines(True), fromfile="current/main.tf", tofile="proposed/main.tf"))
     return TerraformPackage(files, {
         "decision": "Private, encrypted, versioned S3 bucket with logging and total public access block",
         "resources": ["workload bucket", "access-log bucket", "bucket policy", "lifecycle rule"],
@@ -55,7 +78,23 @@ log_bucket_name = "replace-with-unique-log-bucket-name"
         "score_after": simulation.after_overall, "risks": list(simulation.residual_risks),
         "estimated_cost": simulation.estimated_cost, "side_effects": simulation.operational_impact,
         "confidence": simulation.confidence,
-    })
+    }, diff, mappings, explanations)
+
+
+def package_zip_bytes(package: TerraformPackage) -> bytes:
+    """Return an in-memory ZIP; no credentials or environment values are added."""
+    buffer = BytesIO()
+    with ZipFile(buffer, "w", ZIP_DEFLATED) as archive:
+        for name, content in package.files.items():
+            archive.writestr(name, content)
+    return buffer.getvalue()
+
+
+def _baseline_tf(configuration: dict[str, bool | str]) -> str:
+    enabled = [key for key, value in configuration.items() if value is True]
+    lines = ["# Current simulated configuration (not imported from AWS)\n", 'resource "aws_s3_bucket" "workload" {\n', "  bucket = var.bucket_name\n", "}\n"]
+    lines.extend(f"# enabled: {key}\n" for key in sorted(enabled))
+    return "".join(lines)
 
 
 def _main_tf() -> str:
