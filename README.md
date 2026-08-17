@@ -1,11 +1,14 @@
 # Adaptive Multi-Cloud Architect Advisor 3.0.0
 
+![Adaptive Multi-Cloud Architect Advisor V3 overview](docs/images/01-overview-multicloud.png)
+
+> [!IMPORTANT]
+> **Demo / Simulation / Read-only** — synthetic data only. No credentials,
+> cloud mutations, provider execution, Terraform plan/apply or network calls.
+
 Portfolio-grade local advisory and digital-twin laboratory for cloud engineers.
 It transforms requirements into architecture and Terraform, and statically turns
 Terraform back into architecture, risks, FinOps scenarios and remediations.
-
-> Demo and simulation only. Synthetic data. No credentials, cloud mutations,
-> provider execution, Terraform plan/apply, automatic publishing or network calls.
 
 ## Problem solved
 
@@ -33,6 +36,77 @@ Terraform → Visual Architecture → Risks → FinOps → Remediation → Simul
    audit-oriented status, module health and fallback.
 
 History, FinOps and governance are cross-cutting capabilities.
+
+| Overview | Design & Simulation |
+| --- | --- |
+| [![Multi-cloud overview](docs/images/01-overview-multicloud.png)](docs/images/01-overview-multicloud.png) | [![Design and simulation](docs/images/02-design-simulation.png)](docs/images/02-design-simulation.png) |
+| **Code & Test Lab** | **Governance** |
+| [![Code to architecture](docs/images/04-code-to-architecture-risk.png)](docs/images/04-code-to-architecture-risk.png) | [![Governance orchestrator](docs/images/09-governance-orchestrator.png)](docs/images/09-governance-orchestrator.png) |
+
+## Product tour
+
+All screens below use synthetic Demo data and local deterministic analysis.
+
+### Multi-cloud overview
+
+AWS, Azure and GCP demo inventory share one normalized, provider-neutral view.
+
+![Multi-cloud overview](docs/images/01-overview-multicloud.png)
+
+### Project Designer
+
+Requirements, constraints and target services are captured before analysis.
+
+![Project Designer](docs/images/02-design-simulation.png)
+
+### Before/after analysis
+
+Absolute points, percentage change, residual risk and confidence remain distinct.
+
+![Before and after analysis](docs/images/03-before-after-analysis.png)
+
+### Code → Architecture & Risk
+
+Controlled Terraform input becomes a static architecture and granular risk model.
+
+![Code to Architecture and Risk](docs/images/04-code-to-architecture-risk.png)
+
+### CVE/CVSS intelligence
+
+Synthetic, explicitly unverified vulnerability records map back to resources and code.
+
+![CVE and CVSS intelligence](docs/images/05-cve-cvss.png)
+
+### FinOps
+
+Demo cost ranges and cross-resource impacts are separated from provider quotes.
+
+![FinOps](docs/images/06-finops.png)
+
+### AI & Bedrock Advisory
+
+Deterministic local advisory exposes model allowlisting and budget controls while
+real Bedrock invocation remains disabled.
+
+![AI and Bedrock Advisory](docs/images/07-ai-bedrock-advisory.png)
+
+### Terraform and CI/CD
+
+The delivery example keeps pull requests apply-free and controlled apply inert by default.
+
+![Terraform and CI/CD](docs/images/08-terraform-cicd.png)
+
+### Governance and orchestrator
+
+The fail-closed control plane keeps plan, approval and apply unavailable locally.
+
+![Governance and orchestrator](docs/images/09-governance-orchestrator.png)
+
+### Global command palette
+
+Search navigates the central module registry without executing cloud or AI actions.
+
+![Global command palette](docs/images/10-command-palette.png)
 
 ## AI & Bedrock Advisory and global search
 
