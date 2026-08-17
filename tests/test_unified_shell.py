@@ -23,9 +23,9 @@ class UnifiedStateTests(unittest.TestCase):
         self.assertEqual(health["multicloud"].status, HealthStatus.UNAVAILABLE)
         self.assertEqual(health["stable_lab"].status, HealthStatus.AVAILABLE)
 
-    def test_missing_optional_finops_is_degraded_not_fatal(self):
+    def test_finops_interface_is_available_and_isolated(self):
         health = {item.module_id: item for item in probe_modules()}
-        self.assertEqual(health["finops"].status, HealthStatus.DEGRADED)
+        self.assertEqual(health["finops"].status, HealthStatus.AVAILABLE)
         self.assertEqual(health["stable_lab"].status, HealthStatus.AVAILABLE)
 
 

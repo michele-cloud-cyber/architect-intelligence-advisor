@@ -1,205 +1,121 @@
-# AI Architect Advisor (AIA)
+# Adaptive Multi-Cloud Architect Advisor 3.0.0
 
-> An open-source AI-powered Decision Intelligence Platform for AWS Landing Zones.
+Portfolio-grade local advisory and digital-twin laboratory for cloud engineers.
+It transforms requirements into architecture and Terraform, and statically turns
+Terraform back into architecture, risks, FinOps scenarios and remediations.
 
-AI Architect Advisor turns AWS assessment data and security findings into
-architectural intelligence: posture trends, explainable risks, correlated attack
-paths, prioritized actions, and executive narratives.
+> Demo and simulation only. Synthetic data. No credentials, cloud mutations,
+> provider execution, Terraform plan/apply, automatic publishing or network calls.
 
-## Current release: V2.0
+## Problem solved
 
-V2 is the primary Streamlit experience. It keeps the original V1 AWS assessment
-pipeline as its data-collection engine and adds a modular application layer for
-new decision-intelligence capabilities.
+Cloud architecture decisions are frequently split across diagrams, tickets,
+Terraform, security scanners and cost spreadsheets. This project provides one
+traceable workspace where a decision can be followed from requirement to control,
+simulation, Terraform property, policy, test, cost and history—without touching a
+real environment.
 
-Current capabilities include:
+## Two complementary flows
 
-- AWS Organizations, IAM, CloudTrail, GuardDuty, and Security Hub assessment
-- Risk scoring, prioritization, recommendations, and executive reports
-- Historical snapshots with organization, account, and region filters
-- Landing Zone Timeline and architectural fingerprint comparison
-- Risk and posture forecasting based on historical assessments
-- Local evidence-based storytelling and optional Amazon Bedrock generation
-- Security Findings dossier with correlation, attack path, evidence locker,
-  explainable risk, timeline, and narrative
-- Importer contracts for Security Hub, Inspector, Nessus, Nmap, and OpenVAS
-- Interactive AWS Lab Phase 1 with project design, transparent scoring,
-  deterministic before/after simulation, secure S3 Terraform generation,
-  local Policy as Code checks, and a non-published CI/CD example
+```text
+Requirements → Architecture → Simulation → Terraform → Tests → CI/CD
+Terraform → Visual Architecture → Risks → FinOps → Remediation → Simulation → Diff
+```
 
-The Security Findings UI currently uses an isolated deterministic demo dossier.
-Importer interfaces are present, while live ingestion from the declared sources is
-planned work.
+## Four areas
 
-## Dashboard
+1. **Overview** — synthetic AWS, Azure and GCP inventory, filtering and maturity.
+2. **Design & Simulation** — bilingual Project Designer, granular controls,
+   deterministic before/after comparison and residual risk.
+3. **Code & Test Lab** — controlled `.tf`/ZIP input, static architecture graph,
+   findings, IMDSv2 reasoning, FinOps, proposed diff, validation and CI/CD examples.
+4. **Governance** — fail-closed control plane, orchestrator, plugin allowlist,
+   audit-oriented status, module health and fallback.
 
-![Dashboard overview](docs/images/dashboard-overview.jpeg)
-
-Additional views:
-
-- [Forecast](docs/images/dashboard-forecast.jpeg)
-- [Landing Zone Timeline](docs/images/landing-zone-timeline.jpeg)
-- [AI Storytelling](docs/images/ai-storytelling.jpeg)
-- [Security Findings](docs/images/security-findings.jpeg)
+History, FinOps and governance are cross-cutting capabilities.
 
 ## Architecture
 
-![Architecture](docs/architecture.png)
-
 ```text
-AWS Landing Zone
-       |
-       v
-V1 collectors and analyzers
-       |
-       v
-Risk / Priority / Recommendation / History engines
-       |
-       v
-DashboardService application boundary
-       |
-       +--> Timeline / Fingerprint / Forecast / AI Storytelling
-       +--> Security Findings module
-       |
-       v
-Streamlit V2 dashboard
+Streamlit entry points
+  ├─ stable: streamlit_app.py
+  ├─ foundation: demo_streamlit_app.py
+  └─ complete V3: unified_app.py
+          │
+          ├─ versioned NormalizedAppState
+          ├─ fault-isolated UI module boundaries
+          ├─ common Cloud Resource Model
+          ├─ AWS / Azure / GCP demo adapters
+          ├─ Input Security Gateway
+          ├─ static Terraform parser + findings
+          ├─ remediation simulator + diff
+          ├─ synthetic FinOps adapters
+          └─ Governance Control Plane + Orchestrator
 ```
 
-The dashboard accesses assessment data through `DashboardService`; V2 modules do
-not directly depend on Streamlit or construct AWS clients. Security dossiers are
-stored separately from the V1 assessment history.
+Provider adapters never call one another. The UI and orchestrator use common
+contracts. A failed optional module is marked `Degraded` or `Unavailable`; the
+stable laboratory and fallback remain usable.
 
-## Requirements
+## Static Terraform security model
 
-- Python 3.11 or newer
-- AWS credentials only when running a real assessment or Amazon Bedrock narrative
+The Input Security Gateway is fail-closed and permits only bounded `.tf` text:
 
-## Installation
+- controlled extensions, file count, member size and expanded ZIP size;
+- path traversal, absolute paths, symlinks and suspicious compression blocked;
+- malformed/non-text files rejected;
+- `local-exec`, `remote-exec`, file provisioners, filesystem reads, HTTP/external
+  data sources and remote module downloads blocked;
+- secret-like literals redacted before analysis;
+- no Terraform CLI, shell execution, provider loading, network or external storage.
 
-```bash
-git clone https://github.com/michele-cloud-cyber/architect-intelligence-advisor.git
-cd architect-intelligence-advisor
+Original input is never modified. Remediation produces a separate review-only ZIP.
 
+## Analysis coverage
+
+The current deterministic static rules cover public CIDRs, wildcard IAM, secrets,
+encryption, tags and IMDSv2. IMDSv2 recommends `http_tokens = "required"`; hop
+limit `2` is retained as a valid compatibility option when containers require it.
+The common finding model also supports logging, monitoring, backup, versioning,
+retention, resilience, orphan resources and costs for progressive rule additions.
+
+FinOps values are explicitly synthetic ranges—not provider quotes. Unknown resource
+types display `Non stimabile`. Direct cloud cost and operational compatibility cost
+remain separate.
+
+## Windows
+
+Requires Windows 10/11 and Python 3.11+.
+
+- `start_complete_app.bat` — complete V3 application.
+- `start_app.bat` — preserved stable version.
+- `start_foundation_app.bat` — preserved multi-cloud foundation.
+
+Each launcher creates `.venv` when needed and installs `requirements.txt`.
+
+## Development
+
+```powershell
 python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pytest -q
+.venv\Scripts\python.exe -m streamlit run unified_app.py
 ```
 
-Activate the environment:
+## Limitations and future read-only roadmap
 
-```bash
-# Linux/macOS
-source .venv/bin/activate
+- Terraform parsing is intentionally conservative, not a full HCL evaluator.
+- No interpolation evaluation, module resolution or provider schema lookup.
+- Architecture layout and prices are synthetic advisory aids.
+- No real AWS, Azure or GCP connection in V3.
+- Future work: user-authorized read-only inventory adapters, signed evidence import,
+  broader rule packs and independently sandboxed security/FinOps integrations.
+- Controlled apply is outside this portfolio release.
 
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
-```
+## License proposal
 
-Install the runtime dependencies:
+The repository license has **not been changed**. For a public portfolio, consider
+Apache License 2.0 (explicit patent grant) or MIT (short and permissive). Confirm
+the preferred license before replacing the existing file.
 
-```bash
-python -m pip install -r requirements.txt
-```
-
-For development and tests:
-
-```bash
-python -m pip install -r requirements-dev.txt
-```
-
-## Run
-
-Start the V2 dashboard from the repository root:
-
-```bash
-streamlit run app.py
-```
-
-The application opens on **Interactive AWS Lab**. Use the Workspace selector to
-return to the existing **Advisor Dashboard**. Demo and Simulation modes are local;
-AWS Read-only is reserved for a future explicitly authorized connector.
-
-## Streamlit Community Cloud
-
-The public build is intentionally **demo-only**: AWS assessment actions and Amazon
-Bedrock calls are disabled. It does not require or read AWS credentials.
-
-Run the exact cloud entry point locally from the repository root:
-
-```bash
-streamlit run streamlit_app.py
-```
-
-To deploy after pushing the repository to GitHub:
-
-1. Open [Streamlit Community Cloud](https://share.streamlit.io/) and sign in.
-2. Select **Create app** and **Yup, I have an app**.
-3. Select the GitHub repository and branch containing this version.
-4. Set **Main file path** to `streamlit_app.py`.
-5. In **Advanced settings**, select Python 3.12.
-6. Leave **Secrets** empty; this demo requires none.
-7. Choose the app subdomain and select **Deploy**.
-
-Community Cloud executes the application from the repository root. Runtime
-dependencies are pinned in `requirements.txt`, and UI configuration is stored in
-`.streamlit/config.toml`. Do not upload local virtual environments, `.env` files,
-Terraform state, plans, credentials, private keys, or `.streamlit/secrets.toml`.
-
-### Files required in GitHub
-
-- `streamlit_app.py`, `requirements.txt`, `.streamlit/config.toml`
-- `dashboard_v2/`, `v2/`, and `sr/`
-- the bundled demo snapshots in `sr/history/` and `history/last_fingerprint.txt`
-- `README.md`, `LICENSE`, and optionally `docs/` and `tests/`
-
-The root `app.py` remains a compatible local entry point, but Community Cloud should
-use `streamlit_app.py`.
-
-The dashboard loads the compatible snapshots already stored in `history/` and
-`sr/history/`. The **Run assessment** action uses the V1 AWS pipeline and therefore
-requires valid AWS credentials and permissions.
-
-## Tests
-
-```bash
-python -m pytest -q
-```
-
-The test suite covers Security Findings case IDs, importers, deterministic
-correlation and risk scoring, evidence integrity, persistence isolation, service
-integration, and Streamlit rendering.
-
-## Project structure
-
-```text
-app.py                  # V2 application entry point
-dashboard_v2/           # Streamlit presentation and dashboard adapters
-sr/                     # V1 collectors, engines, services, and history
-v2/modules/             # Independent V2 capability modules
-tests/                  # Automated test suite
-docs/                   # Architecture and dashboard images
-history/                # Compatible assessment snapshots
-```
-
-## Module status
-
-| Module | Status |
-| --- | --- |
-| Landing Zone Timeline | Available |
-| Fingerprint Engine | Available |
-| Forecast Engine | Available |
-| AI Storytelling | Available; Bedrock is optional |
-| Security Findings | Demo MVP available; live ingestion planned |
-| FinOps Dashboard | Planned |
-| Recommendation Engine V2 | Planned |
-| What-if Simulator | Planned |
-
-## Roadmap
-
-- Connect Security Findings importers to live sources
-- Add FinOps metrics and cost optimization views
-- Implement remediation what-if simulation
-- Add V2 recommendation and compliance modules
-- Expand multi-account analysis and architecture pattern recognition
-
-## License
-
-MIT License. Pull requests, suggestions, and architectural discussions are welcome.
+See [CHANGELOG.md](CHANGELOG.md) and [docs/PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md).
