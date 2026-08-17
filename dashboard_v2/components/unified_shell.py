@@ -14,8 +14,10 @@ from dashboard_v2.components.multicloud_foundation import (
 from dashboard_v2.components.platform_lab import render_platform_lab
 from dashboard_v2.components.code_architecture import render_code_architecture
 from dashboard_v2.components.security_findings import render_vulnerability_intelligence
+from dashboard_v2.components.ai_bedrock_advisory import render_ai_bedrock_advisory
+from dashboard_v2.components.command_palette import render_command_palette
 from v2.modules.security_findings.service import build_demo_security_case
-from v2.modules.unified_shell import HealthStatus, NormalizedAppState, probe_modules
+from v2.modules.unified_shell import HealthStatus, MODULE_REGISTRY, NormalizedAppState, get_module, probe_modules, search_modules
 
 
 STABLE_COMMIT = "7e1db43"
@@ -53,7 +55,7 @@ def render_unified_application() -> None:
         mode = st.radio(tx["mode"], ["Demo", "Simulation", "Read-only"], index=["Demo", "Simulation", "Read-only"].index(state.operating_mode))
         forced_failure = None
         if view == "Modalità diagnostica":
-            forced_failure = st.selectbox(tx["failure"], [None, "multicloud", "stable_lab", "governance", "terraform", "security_findings", "finops"], format_func=lambda value: tx["none"] if value is None else value)
+            forced_failure = st.selectbox(tx["failure"], [None,*[item.module_id for item in MODULE_REGISTRY]], format_func=lambda value: tx["none"] if value is None else value)
         st.session_state.normalized_app_state = state.evolve(active_view=view, operating_mode=mode)
         st.markdown(f"**{tx['version']}:** `{UNIFIED_VERSION}`")
         st.markdown(f"**{tx['active']}:** `{mode}`")
@@ -66,12 +68,25 @@ def render_unified_application() -> None:
             for key in ("v3_bundle","v3_original","v3_sim","lab_simulation","lab_package","mc_history"):
                 st.session_state.pop(key,None)
             st.rerun()
+        st.divider()
+        query=st.text_input("Cerca funzione…" if lang=="it" else "Search function…",key="global_function_search",placeholder="CVE, costi, Bedrock, Terraform, IMDS…")
+        for result in search_modules(query,lang)[:6]:
+            health=next((item for item in probe_modules(forced_failure) if item.module_id==result.module_id),None)
+            status=health.status.value if health else "Disabled"
+            if st.button(f"{result.name(lang)} · {status} · {result.badge}",key=f"search_{result.module_id}",use_container_width=True,help=result.description(lang)):
+                st.query_params["module"]=result.module_id; st.rerun()
+        st.markdown("<style>.st-key-global_nav_targets{display:none!important}</style>",unsafe_allow_html=True)
+        with st.container(key="global_nav_targets"):
+            for module in MODULE_REGISTRY:
+                if st.button(f"navigate::{module.module_id}",key=f"nav_target_{module.module_id}"):
+                    st.query_params["module"]=module.module_id; st.rerun()
         st.divider(); st.caption(tx["health"])
         for item in probe_modules(forced_failure):
             icon = "🟢" if item.status is HealthStatus.AVAILABLE else "🟠" if item.status is HealthStatus.DEGRADED else "🔴"
             st.write(f"{icon} **{item.label}** · {item.status.value}")
             st.caption(item.detail)
 
+    render_command_palette(lang)
     st.info(tx["onboarding"])
     st.caption(f"Normalized shared state schema {state.schema_version} · Demo / Simulation-only · synthetic data · no credentials · no cloud mutations · no automatic apply")
     if view == "Versione stabile":
@@ -83,16 +98,44 @@ def render_unified_application() -> None:
         return
 
     orchestrator, governance = foundation_runtime()
+    routed_id=st.query_params.get("module")
+    routed=get_module(routed_id) if routed_id else None
+    if routed:
+        if st.button("← Vista completa" if lang=="it" else "← Complete view"):
+            st.query_params.pop("module",None); st.rerun()
+        st.title(routed.name(lang)); st.caption(f"{routed.destination} · {routed.badge} · {routed.description(lang)}")
+        _render_registered_module(routed.module_id,lang,orchestrator,governance,forced_failure)
+        return
     st.title(tx["complete"])
-    sections = st.tabs([tx["overview"],tx["design"],tx["code"],tx["governance"]])
-    with sections[0]: _safe_section("Panoramica e dati multi-cloud", lambda: render_multicloud_overview(orchestrator), "multicloud", forced_failure)
+    area_ids=("overview","stable_lab","code_architecture","governance")
+    area_names=[get_module(item).name(lang) if item!="code_architecture" else tx["code"] for item in area_ids]
+    sections = st.tabs(area_names)
+    with sections[0]: _safe_section("Panoramica e dati multi-cloud", lambda: render_multicloud_overview(orchestrator), "overview", forced_failure)
     with sections[1]: _safe_section("Project Designer, controls & simulations", render_platform_lab, "stable_lab", forced_failure)
     with sections[2]:
-        architecture_tab,vulnerability_tab,history_tab=st.tabs(["Code → Architecture & Risk","Vulnerability Intelligence","History / Storico"])
-        with architecture_tab:_safe_section("Code → Architecture & Risk",lambda:render_code_architecture(lang),"terraform",forced_failure)
-        with vulnerability_tab:_safe_section("Vulnerability Intelligence",lambda:render_vulnerability_intelligence(build_demo_security_case()),"security_findings",forced_failure)
-        with history_tab:_safe_section("Scenario history",lambda:render_scenario_history(orchestrator),"multicloud",forced_failure)
+        architecture_tab,vulnerability_tab,ai_tab,history_tab=st.tabs(["Code → Architecture & Risk","Vulnerability Intelligence","AI & Bedrock Advisory","History / Storico"])
+        with architecture_tab:_safe_section("Code → Architecture & Risk",lambda:render_code_architecture(lang),"code_architecture",forced_failure)
+        with vulnerability_tab:_safe_section("Vulnerability Intelligence",lambda:render_vulnerability_intelligence(build_demo_security_case()),"vulnerability",forced_failure)
+        with ai_tab:_safe_section("AI & Bedrock Advisory",lambda:render_ai_bedrock_advisory(lang),"ai_bedrock",forced_failure)
+        with history_tab:_safe_section("Scenario history",lambda:render_scenario_history(orchestrator),"history",forced_failure)
     with sections[3]:
         _safe_section("Governance Control Plane & Orchestrator",lambda:render_governance_plane(orchestrator,governance),"governance",forced_failure)
         from v2.modules.finops_dashboard import render_finops
         _safe_section("Cross-cutting FinOps",render_finops,"finops",forced_failure)
+
+
+def _render_registered_module(module_id,lang,orchestrator,governance,forced_failure):
+    renderers={
+        "overview":lambda:render_multicloud_overview(orchestrator),
+        "stable_lab":render_platform_lab,
+        "code_architecture":lambda:render_code_architecture(lang),
+        "vulnerability":lambda:render_vulnerability_intelligence(build_demo_security_case()),
+        "ai_bedrock":lambda:render_ai_bedrock_advisory(lang),
+        "history":lambda:render_scenario_history(orchestrator),
+        "governance":lambda:render_governance_plane(orchestrator,governance),
+    }
+    if module_id=="finops":
+        from v2.modules.finops_dashboard import render_finops
+        renderer=render_finops
+    else: renderer=renderers[module_id]
+    _safe_section(get_module(module_id).name(lang),renderer,module_id,forced_failure)

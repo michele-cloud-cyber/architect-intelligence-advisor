@@ -20,8 +20,8 @@ class UnifiedStateTests(unittest.TestCase):
         with self.assertRaises(ValueError): state.evolve(operating_mode="Live")
 
     def test_forced_module_failure_is_isolated(self):
-        health = {item.module_id: item for item in probe_modules("multicloud")}
-        self.assertEqual(health["multicloud"].status, HealthStatus.UNAVAILABLE)
+        health = {item.module_id: item for item in probe_modules("overview")}
+        self.assertEqual(health["overview"].status, HealthStatus.UNAVAILABLE)
         self.assertEqual(health["stable_lab"].status, HealthStatus.AVAILABLE)
 
     def test_finops_interface_is_available_and_isolated(self):
@@ -60,6 +60,7 @@ class UnifiedExposureRegressionTests(unittest.TestCase):
         self.assertTrue(expected.issubset(complete_tabs))
         self.assertIn("Code → Architecture & Risk",complete_tabs)
         self.assertIn("Vulnerability Intelligence",complete_tabs)
+        self.assertIn("AI & Bedrock Advisory",complete_tabs)
 
     def test_vulnerability_demo_exposes_cve_cvss_resource_and_terraform(self):
         complete=AppTest.from_file(ROOT / "unified_app.py").run(timeout=30)
@@ -67,7 +68,7 @@ class UnifiedExposureRegressionTests(unittest.TestCase):
         self.assertIn("Vulnerability Intelligence",labels)
         frames=list(complete.dataframe)
         columns={column for frame in frames for column in getattr(frame.value,"columns",())}
-        self.assertTrue({"CVE ID","CVSS score","CVSS vector","Risorsa grafico","Mapping Terraform"}.issubset(columns))
+        self.assertTrue({"CVE ID","CVSS score","CVSS vector","Fonte","Data dato","Tipo dato","Risorsa grafico","Mapping Terraform"}.issubset(columns))
 
 
 if __name__ == "__main__":

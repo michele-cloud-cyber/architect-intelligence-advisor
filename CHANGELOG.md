@@ -2,6 +2,8 @@
 
 ## 3.0.0 — 2026-08-17
 
+- Added visible deterministic AI & Bedrock Advisory with real invocation disabled.
+- Added a central module registry, permanent sidebar search and Ctrl+K/slash command palette.
 - Fixed complete-view routing so Code → Architecture & Risk and the existing
   synthetic Security Findings/CVE/CVSS dossier are directly reachable as separate
   Code & Test Lab tabs.

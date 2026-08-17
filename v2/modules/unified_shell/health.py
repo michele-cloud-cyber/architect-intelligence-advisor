@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from importlib import import_module
+from .registry import MODULE_REGISTRY
 
 
 class HealthStatus(str, Enum):
@@ -21,19 +22,10 @@ class ModuleHealth:
     detail: str
 
 
-MODULE_PROBES = {
-    "stable_lab": ("Laboratorio stabile", "dashboard_v2.components.platform_lab", "render_platform_lab", False),
-    "multicloud": ("Foundation multi-cloud", "dashboard_v2.components.multicloud_foundation", "render_multicloud_platform", False),
-    "governance": ("Governance e orchestratore", "v2.modules.multicloud_foundation", "GovernanceControlPlane", False),
-    "terraform": ("Terraform e validazione", "v2.modules.platform_lab.terraform", "generate_s3_package", False),
-    "finops": ("FinOps trasversale", "v2.modules.finops_dashboard", "render_finops", True),
-    "security_findings": ("Vulnerability Intelligence", "dashboard_v2.components.security_findings", "render_vulnerability_intelligence", False),
-}
-
-
 def probe_modules(forced_failure: str | None = None) -> tuple[ModuleHealth, ...]:
     health = []
-    for module_id, (label, path, attribute, optional) in MODULE_PROBES.items():
+    for definition in MODULE_REGISTRY:
+        module_id,label,path,attribute,optional=definition.module_id,definition.name_it,definition.probe_module,definition.probe_attribute,definition.optional
         if forced_failure == module_id:
             health.append(ModuleHealth(module_id, label, HealthStatus.UNAVAILABLE, "Guasto simulato e isolato"))
             continue

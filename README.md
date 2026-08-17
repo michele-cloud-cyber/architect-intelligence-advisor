@@ -34,6 +34,22 @@ Terraform → Visual Architecture → Risks → FinOps → Remediation → Simul
 
 History, FinOps and governance are cross-cutting capabilities.
 
+## AI & Bedrock Advisory and global search
+
+The visible AI advisory module interprets only a normalized, redacted, read-only
+local model. In Demo it deterministically estimates input/output tokens, per-analysis
+cost and remaining budget, then presents narrative, risks, dependencies, historical
+evolution, architecture suggestions and current/proposed comparison. Real Bedrock is
+disabled by default and no invocation client exists in V3. A future connection would
+require explicit consent, a temporary least-privilege role, allowlisted model, token
+and cost limits, timeout, redaction and fail-closed prompt-injection controls.
+
+Navigation and search share one central provider-neutral module registry. Use the
+permanent **Cerca funzione… / Search function…** field or press **Ctrl+K**. Press `/`
+outside an input to open the palette, use arrow keys, Enter and Esc. Search only
+navigates; it never scans, generates code or invokes AI/cloud services. Browser
+`Ctrl+F` is not replaced.
+
 ## Architecture
 
 ```text
@@ -70,6 +86,8 @@ The Input Security Gateway is fail-closed and permits only bounded `.tf` text:
 - no Terraform CLI, shell execution, provider loading, network or external storage.
 
 Original input is never modified. Remediation produces a separate review-only ZIP.
+Vulnerability Intelligence labels CVE/CVSS rows with source, observation date and
+data class (`Demo sintetico · non verificato`); it never implies a real scan.
 
 ## Analysis coverage
 

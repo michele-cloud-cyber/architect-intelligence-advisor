@@ -20,4 +20,30 @@ test("complete view exposes and uses both Code & Test Lab modules", async ({ pag
   await expect(page.getByText("CVSS vector")).toBeVisible();
   await expect(page.getByText("Mapping Terraform")).toBeVisible();
   await expect(page.getByText("Security Findings")).toBeVisible();
+
+  await page.getByRole("tab", { name: "AI & Bedrock Advisory" }).click();
+  await expect(page.getByText(/Bedrock reale disabilitato/)).toBeVisible();
+  await expect(page.getByText("Input token")).toBeVisible();
+  await expect(page.getByText("Costo demo")).toBeVisible();
+  await expect(page.getByText("Storytelling / Narrative")).toBeVisible();
+});
+
+test("global command palette supports keyboard navigation without actions", async ({ page }) => {
+  await page.goto(process.env.AIA_V3_URL || "http://127.0.0.1:8529/");
+  await page.keyboard.press("Control+K");
+  const palette=page.getByPlaceholder("Cerca comando…");
+  await expect(palette).toBeVisible();
+  await palette.fill("CVSS");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowUp");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/module=vulnerability/);
+  await expect(page.getByText(/CVE\/CVSS sintetici/)).toBeVisible();
+
+  await page.getByRole("button", { name: "← Vista completa" }).click();
+  await page.getByRole("heading", { name: "Vista completa" }).click();
+  await page.keyboard.press("/");
+  await expect(palette).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(palette).toBeHidden();
 });
