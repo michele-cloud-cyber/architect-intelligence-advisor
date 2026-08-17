@@ -1,15 +1,17 @@
 # Architect Advisor V2 extension modules
 
-Each directory in this package is a reserved, independent V2 module. A future module should expose an application-facing service through its own package and depend on shared contracts rather than dashboard internals.
+Each directory in this package is an independent V2 module. Modules expose an
+application-facing service through their own package and depend on shared contracts
+rather than dashboard internals.
 
-Planned modules do not contain functional implementations yet.
-
-| Module | Intended responsibility |
-| --- | --- |
-| `ai_storytelling` | Evidence-based executive and technical narratives |
-| `forecast_engine` | Risk and posture forecasting |
-| `landing_zone_timeline` | Chronological infrastructure and assessment events |
-| `fingerprint_engine` | Versioned architectural fingerprinting |
-| `finops_dashboard` | Cost, efficiency and FinOps metrics |
-| `recommendation_engine` | Prioritized remediation backlog |
-| `what_if_simulator` | Safe remediation impact simulation |
+| Module | Responsibility | Status |
+| --- | --- | --- |
+| `ai_storytelling` | Evidence-based executive and technical narratives | Available |
+| `forecast_engine` | Risk and posture forecasting | Available |
+| `landing_zone_timeline` | Chronological infrastructure and assessment events | Available |
+| `fingerprint_engine` | Versioned architectural fingerprinting | Available |
+| `security_findings` | Correlated security dossier and explainable risk | Demo MVP |
+| `platform_lab` | Project design, scoring, simulation and secure S3 Terraform slice | Phase 1 available |
+| `finops_dashboard` | Cost, efficiency and FinOps metrics | Planned |
+| `recommendation_engine` | Prioritized remediation backlog | Planned |
+| `what_if_simulator` | Safe remediation impact simulation | Planned |

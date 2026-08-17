@@ -13,6 +13,7 @@ def render_ai_storytelling(
     status: CapabilityStatus,
     generate_demo_story: Callable[[], str],
     generate_ai_story: Callable[[], str],
+    demo_only: bool = False,
 ) -> None:
     """Render local and Bedrock-backed storytelling in the current dashboard."""
 
@@ -23,9 +24,10 @@ def render_ai_storytelling(
         st.info("Nessuna narrativa disponibile. Esegui almeno due assessment per generare una cronologia.")
         return
 
+    modes = ["Demo — Local Mode"] if demo_only else ["Demo — Local Mode", "AI — Amazon Bedrock"]
     mode = st.radio(
         "Narrative mode",
-        ["Demo — Local Mode", "AI — Amazon Bedrock"],
+        modes,
         horizontal=True,
     )
     using_bedrock = mode.startswith("AI")
@@ -39,6 +41,8 @@ def render_ai_storytelling(
             "• Token consumption: 0\n\n"
             "• Estimated cost: $0.00"
         )
+        if demo_only:
+            st.caption("Public demo: Amazon Bedrock calls are disabled.")
 
     if st.button("Generate historical narrative", type="primary", key="generate_ai_story"):
         try:

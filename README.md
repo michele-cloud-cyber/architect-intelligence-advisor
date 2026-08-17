@@ -1,329 +1,139 @@
-# 🏗️ AI Architect Advisor (AIA)
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![Amazon Bedrock](https://img.shields.io/badge/Amazon-Bedrock-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
-![AI](https://img.shields.io/badge/AI-Decision%20Intelligence-6A5ACD?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-2.0-blue?style=for-the-badge)
-> **An Open-Source AI-powered Decision Intelligence Platform for AWS Landing Zones**
+# Adaptive Multi-Cloud Architect Advisor 3.0.0
 
-AI Architect Advisor (AIA) is an intelligent decision-support platform designed to help Cloud Architects understand, analyze, and improve complex AWS Landing Zones.
+Portfolio-grade local advisory and digital-twin laboratory for cloud engineers.
+It transforms requirements into architecture and Terraform, and statically turns
+Terraform back into architecture, risks, FinOps scenarios and remediations.
 
-Instead of simply displaying AWS findings, AIA correlates cloud telemetry from multiple AWS services, calculates architectural risk, prioritizes remediation actions, predicts future posture, and generates AI-powered executive recommendations.
+> Demo and simulation only. Synthetic data. No credentials, cloud mutations,
+> provider execution, Terraform plan/apply, automatic publishing or network calls.
 
-The platform combines traditional cloud assessment techniques with Artificial Intelligence to transform raw infrastructure data into actionable architectural intelligence.
+## Problem solved
 
----
+Cloud architecture decisions are frequently split across diagrams, tickets,
+Terraform, security scanners and cost spreadsheets. This project provides one
+traceable workspace where a decision can be followed from requirement to control,
+simulation, Terraform property, policy, test, cost and history—without touching a
+real environment.
 
-## ✨ Key Features
-
-- 🔍 Multi-service AWS analysis
-- 📊 Enterprise Streamlit Dashboard
-- 📈 Historical posture tracking
-- 🔮 Forecast Engine
-- 🤖 AI Storytelling (Local & Amazon Bedrock)
-- 🛡️ Security Findings Investigation
-- 📅 Landing Zone Timeline
-- 🎯 Risk Prioritization Engine
-- 🧠 Infrastructure Fingerprinting
-- 📄 Executive Report Generation
-
----
-
-# 🏛️ High-Level Architecture
-
-![Architecture](docs/architecture.png)
-
-**Figure 1.** High-level architecture of AI Architect Advisor.
-
-The platform continuously analyzes AWS Landing Zone telemetry, processes cloud events through multiple AI decision engines, and produces actionable recommendations for Cloud Architects.
-
-The architecture is composed of four major layers:
-
-- **User Interface** – Enterprise Streamlit Dashboard
-- **AI Advisor Engines** – Collection, Analysis, Risk, Prioritization, Decision and History
-- **AWS Environment** – Organizations, IAM, CloudTrail, GuardDuty, Security Hub and additional AWS services
-- **AI Services** – Amazon Bedrock for executive-level narratives and recommendations
-- ## 🖥️ Dashboard Overview
-
-The Enterprise Dashboard provides Cloud Architects with a centralized view of AWS Landing Zone health, historical posture, risk distribution, compliance metrics, and executive KPIs.
-
-It allows engineers to quickly understand the current architectural status before investigating individual findings.
-
-![Dashboard Overview](docs/images/dashboard-overview.jpeg)
-
----
-
-## 🔮 Forecast Engine
-
-The Forecast Engine predicts the expected evolution of the AWS Landing Zone by analyzing historical assessment snapshots.
-
-It estimates future Risk Score, Security Score, Compliance trends, FinOps readiness, and prediction confidence, enabling proactive decision making instead of reactive operations.
-
-![Forecast Engine](docs/images/dashboard-forecast.jpeg)
-
----
-
-## 🤖 AI Storytelling
-
-AI Storytelling converts historical assessment data into executive-level narratives.
-
-The engine supports both:
-
-- Local AI mode (offline demonstration)
-- Amazon Bedrock integration
-
-Instead of presenting raw metrics, the platform explains posture evolution, architectural changes, and recommended remediation priorities in natural language.
-
-![AI Storytelling](docs/images/ai-storytelling.jpeg)
-
----
-
-## 📅 Landing Zone Timeline
-
-The Landing Zone Timeline provides a chronological history of infrastructure changes and assessment results.
-
-Each event captures architectural modifications, posture variations, detected findings, and risk evolution, allowing Cloud Architects to understand how an AWS environment changes over time.
-
-![Landing Zone Timeline](docs/images/landing-zone-timeline.jpeg)
-
----
-
-## 🛡️ Security Findings
-
-The Security Findings module correlates evidence collected from AWS security services into a structured investigation report.
-
-Each finding includes:
-
-- Executive summary
-- Technical impact
-- Business impact
-- Severity classification
-- Confidence score
-- Timeline
-- Supporting evidence
-
-The objective is to transform raw security alerts into actionable architectural intelligence.
-
-![Security Findings](docs/images/security-findings.jpeg)
-
----
-
----
-
-# 🚀 Dashboard Showcase
-
-Version 2 introduces a completely redesigned enterprise dashboard focused on historical analysis, executive visibility, forecasting, AI-assisted decision making and security investigations.
-# ⚙️ AI Decision Pipeline
-
-AI Architect Advisor follows a modular decision pipeline designed to transform raw AWS telemetry into actionable architectural recommendations.
+## Two complementary flows
 
 ```text
-AWS Landing Zone
-        │
-        ▼
-Collectors
-        │
-        ▼
-Analyzers
-        │
-        ▼
-Risk Engine
-        │
-        ▼
-Priority Engine
-        │
-        ▼
-Recommendation Engine
-        │
-        ▼
-Executive Report Engine
-        │
-        ▼
-AI Storytelling (Local / Amazon Bedrock)
-        │
-        ▼
-Enterprise Dashboard
+Requirements → Architecture → Simulation → Terraform → Tests → CI/CD
+Terraform → Visual Architecture → Risks → FinOps → Remediation → Simulation → Diff
 ```
 
-Each stage has a dedicated responsibility, making the platform modular, extensible, and easy to evolve.
+## Four areas
 
----
+1. **Overview** — synthetic AWS, Azure and GCP inventory, filtering and maturity.
+2. **Design & Simulation** — bilingual Project Designer, granular controls,
+   deterministic before/after comparison and residual risk.
+3. **Code & Test Lab** — controlled `.tf`/ZIP input, static architecture graph,
+   findings, IMDSv2 reasoning, FinOps, proposed diff, validation and CI/CD examples.
+4. **Governance** — fail-closed control plane, orchestrator, plugin allowlist,
+   audit-oriented status, module health and fallback.
 
-# ☁️ Supported AWS Services
+History, FinOps and governance are cross-cutting capabilities.
 
-Current integrations include:
+## AI & Bedrock Advisory and global search
 
-- AWS Organizations
-- AWS IAM
-- Amazon CloudTrail
-- Amazon GuardDuty
-- AWS Security Hub
-- Amazon Bedrock
+The visible AI advisory module interprets only a normalized, redacted, read-only
+local model. In Demo it deterministically estimates input/output tokens, per-analysis
+cost and remaining budget, then presents narrative, risks, dependencies, historical
+evolution, architecture suggestions and current/proposed comparison. Real Bedrock is
+disabled by default and no invocation client exists in V3. A future connection would
+require explicit consent, a temporary least-privilege role, allowlisted model, token
+and cost limits, timeout, redaction and fail-closed prompt-injection controls.
 
-The architecture has been designed to support future integrations with additional AWS services such as AWS Config, Inspector, Access Analyzer, Macie, Detective, and Cost Explorer.
+Navigation and search share one central provider-neutral module registry. Use the
+permanent **Cerca funzione… / Search function…** field or press **Ctrl+K**. Press `/`
+outside an input to open the palette, use arrow keys, Enter and Esc. Search only
+navigates; it never scans, generates code or invokes AI/cloud services. Browser
+`Ctrl+F` is not replaced.
 
----
-
-# 📂 Project Structure
+## Architecture
 
 ```text
-architect-intelligence-advisor/
-│
-├── dashboard_v2/
-│   ├── app.py
-│   ├── components/
-│   └── modules/
-│
-├── docs/
-│   ├── architecture.png
-│   └── images/
-│
-├── history/
-│
-├── src/
-│   ├── analyzers/
-│   ├── collectors/
-│   ├── config/
-│   ├── engines/
-│   ├── models/
-│   ├── services/
-│   └── utils/
-│
-├── tests/
-├── README.md
-├── LICENSE
-└── requirements.txt
+Streamlit entry points
+  ├─ stable: streamlit_app.py
+  ├─ foundation: demo_streamlit_app.py
+  └─ complete V3: unified_app.py
+          │
+          ├─ versioned NormalizedAppState
+          ├─ fault-isolated UI module boundaries
+          ├─ common Cloud Resource Model
+          ├─ AWS / Azure / GCP demo adapters
+          ├─ Input Security Gateway
+          ├─ static Terraform parser + findings
+          ├─ remediation simulator + diff
+          ├─ synthetic FinOps adapters
+          └─ Governance Control Plane + Orchestrator
 ```
 
----
+Provider adapters never call one another. The UI and orchestrator use common
+contracts. A failed optional module is marked `Degraded` or `Unavailable`; the
+stable laboratory and fallback remain usable.
 
-# 🚀 Installation
+## Static Terraform security model
 
-Clone the repository:
+The Input Security Gateway is fail-closed and permits only bounded `.tf` text:
 
-```bash
-git clone https://github.com/michele-cloud-cyber/architect-intelligence-advisor.git
+- controlled extensions, file count, member size and expanded ZIP size;
+- path traversal, absolute paths, symlinks and suspicious compression blocked;
+- malformed/non-text files rejected;
+- `local-exec`, `remote-exec`, file provisioners, filesystem reads, HTTP/external
+  data sources and remote module downloads blocked;
+- secret-like literals redacted before analysis;
+- no Terraform CLI, shell execution, provider loading, network or external storage.
 
-cd architect-intelligence-advisor
+Original input is never modified. Remediation produces a separate review-only ZIP.
+Vulnerability Intelligence labels CVE/CVSS rows with source, observation date and
+data class (`Demo sintetico · non verificato`); it never implies a real scan.
+
+## Analysis coverage
+
+The current deterministic static rules cover public CIDRs, wildcard IAM, secrets,
+encryption, tags and IMDSv2. IMDSv2 recommends `http_tokens = "required"`; hop
+limit `2` is retained as a valid compatibility option when containers require it.
+The common finding model also supports logging, monitoring, backup, versioning,
+retention, resilience, orphan resources and costs for progressive rule additions.
+
+FinOps values are explicitly synthetic ranges—not provider quotes. Unknown resource
+types display `Non stimabile`. Direct cloud cost and operational compatibility cost
+remain separate.
+
+## Windows
+
+Requires Windows 10/11 and Python 3.11+.
+
+- `start_complete_app.bat` — complete V3 application.
+- `start_app.bat` — preserved stable version.
+- `start_foundation_app.bat` — preserved multi-cloud foundation.
+
+Each launcher creates `.venv` when needed and installs `requirements.txt`.
+
+## Development
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pytest -q
+.venv\Scripts\python.exe -m streamlit run unified_app.py
 ```
 
-Install the required dependencies:
+## Limitations and future read-only roadmap
 
-```bash
-pip install -r requirements.txt
-```
+- Terraform parsing is intentionally conservative, not a full HCL evaluator.
+- No interpolation evaluation, module resolution or provider schema lookup.
+- Architecture layout and prices are synthetic advisory aids.
+- No real AWS, Azure or GCP connection in V3.
+- Future work: user-authorized read-only inventory adapters, signed evidence import,
+  broader rule packs and independently sandboxed security/FinOps integrations.
+- Controlled apply is outside this portfolio release.
 
----
+## License proposal
 
-# ▶️ Running the Application
+The repository license has **not been changed**. For a public portfolio, consider
+Apache License 2.0 (explicit patent grant) or MIT (short and permissive). Confirm
+the preferred license before replacing the existing file.
 
-### Launch the Enterprise Dashboard
-
-```bash
-streamlit run dashboard_v2/app.py
-```
-
-The V2 dashboard is the primary user interface for AI Architect Advisor.
-
-The original V1 assessment engine remains responsible for:
-
-- Data collection
-- AWS analysis
-- Risk evaluation
-- Historical snapshots
-- AI Storytelling
-- Recommendation generation
-
-while Version 2 provides the enterprise visualization layer with historical analytics, forecasting, and security investigation capabilities.
-# 🚧 Current Status
-
-AI Architect Advisor is under active development.
-
-The project has evolved from a proof-of-concept into an enterprise-oriented Decision Intelligence Platform for AWS Landing Zones.
-
-Current development focuses on:
-
-- Historical assessment analysis
-- AI-assisted decision support
-- Forecasting capabilities
-- Executive reporting
-- Security investigation workflows
-- Enterprise dashboard experience
-
----
-
-# 🗺️ Roadmap
-
-## Version 2 (Current)
-
-- ✅ Enterprise Streamlit Dashboard
-- ✅ Historical Assessment Engine
-- ✅ Landing Zone Timeline
-- ✅ Infrastructure Fingerprinting
-- ✅ Forecast Engine
-- ✅ AI Storytelling
-- ✅ Security Findings Investigation
-- ✅ Amazon Bedrock Integration
-- ✅ Risk Prioritization Engine
-
----
-
-## Version 3
-
-Planned features include:
-
-- Natural Language Chat Assistant
-- Multi-account assessment engine
-- Multi-region intelligence
-- FinOps Advisor
-- Compliance Advisor
-- Cost Optimization Advisor
-- Architecture Pattern Recognition
-- Explainability Engine
-- Interactive Recommendations
-- AI Decision Memory
-
----
-
-## Long-Term Vision
-
-The long-term vision of AI Architect Advisor is to become an intelligent architectural companion capable of understanding the complete operational state of an AWS Landing Zone.
-
-Rather than simply reporting findings, the platform aims to reason about infrastructure, explain architectural behavior, predict future risks, and assist Cloud Architects during strategic decision-making.
-
-Future releases will expand support for additional AWS services, advanced AI reasoning, governance, compliance, FinOps, and autonomous architectural recommendations.
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
-
-If you have ideas for new AWS integrations, AI capabilities, dashboard improvements, or architectural enhancements, feel free to open an issue or submit a Pull Request.
-
-Community feedback is highly appreciated and helps shape the future of the project.
-
----
-
-# 📄 License
-
-This project is released under the **MIT License**.
-
-See the `LICENSE` file for additional details.
-
----
-
-# 👨‍💻 Author
-
-**Michele**
-
-Cloud Security • AWS • Artificial Intelligence • Decision Intelligence
-
-GitHub:
-https://github.com/michele-cloud-cyber
-
----
-
-⭐ If you find this project useful, consider giving it a **Star** on GitHub to support its development.
+See [CHANGELOG.md](CHANGELOG.md) and [docs/PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md).

@@ -1,0 +1,3 @@
+# Reproducible runtime dependencies for local use and Streamlit Community Cloud.
+boto3==1.43.67
+streamlit==1.61.1

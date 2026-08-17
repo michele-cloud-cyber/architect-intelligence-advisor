@@ -1,10 +1,14 @@
 """Integration tests for the V2 Security Findings presentation boundary."""
 
 import unittest
+from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
 from sr.services.dashboard_service import DashboardService
+
+
+APP_PATH = Path(__file__).resolve().parents[1] / "app.py"
 
 
 class SecurityFindingsDashboardTests(unittest.TestCase):
@@ -16,7 +20,10 @@ class SecurityFindingsDashboardTests(unittest.TestCase):
         self.assertEqual(dossier.title, "Possible Internet-to-S3 compromise path through exposed EC2 workload")
 
     def test_dashboard_renders_security_findings_section(self) -> None:
-        app = AppTest.from_file("app.py")
+        app = AppTest.from_file(APP_PATH)
+        app.run(timeout=30)
+        workspace = next(item for item in app.radio if item.label == "Workspace")
+        workspace.set_value("Advisor Dashboard")
         app.run(timeout=30)
 
         self.assertFalse(app.exception)

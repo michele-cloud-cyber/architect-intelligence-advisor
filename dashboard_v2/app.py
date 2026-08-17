@@ -9,6 +9,7 @@ import streamlit as st
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEMO_ONLY = True
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -25,15 +26,27 @@ from dashboard_v2.components.kpi_cards import render_kpi_cards  # noqa: E402
 from dashboard_v2.components.layout import configure_page, render_header, render_sidebar  # noqa: E402
 from dashboard_v2.components.security_findings import render_security_findings  # noqa: E402
 from dashboard_v2.components.timeline import render_timeline  # noqa: E402
+from dashboard_v2.components.platform_lab import render_platform_lab  # noqa: E402
 from sr.services.dashboard_service import DashboardService  # noqa: E402
 
 
 configure_page()
 
+workspace = st.sidebar.radio(
+    "Workspace",
+    ["Advisor Dashboard", "Interactive AWS Lab"],
+    index=1,
+    key="workspace_navigation",
+)
+
+if workspace == "Interactive AWS Lab":
+    render_platform_lab()
+    st.stop()
+
 if "dashboard_service" not in st.session_state:
     st.session_state["dashboard_service"] = DashboardService(PROJECT_ROOT)
 service = st.session_state["dashboard_service"]
-filters, run_assessment = render_sidebar(service.get_filter_options())
+filters, run_assessment = render_sidebar(service.get_filter_options(), demo_only=DEMO_ONLY)
 
 if run_assessment:
     run_assessment_with_progress(service)
@@ -53,7 +66,7 @@ if data is None:
 if st.session_state.pop("assessment_completed", False):
     st.success("Assessment completed successfully")
 
-render_header(data.source_label, data.latest_scan_at, data.assessment_summary)
+render_header("Bundled demo assessment history" if DEMO_ONLY else data.source_label, data.latest_scan_at, data.assessment_summary)
 st.caption(f"Selected scope contains {view.filtered_snapshot_count} historical snapshots.")
 
 render_kpi_cards(data.metrics)
@@ -91,6 +104,7 @@ render_ai_storytelling(
     service.get_ai_storytelling_status(filters),
     lambda: service.generate_demo_storytelling(filters),
     lambda: service.generate_ai_storytelling(filters),
+    demo_only=DEMO_ONLY,
 )
 
 st.divider()

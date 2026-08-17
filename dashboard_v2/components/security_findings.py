@@ -7,6 +7,44 @@ import streamlit as st
 from v2.modules.security_findings.models import SecurityCase
 
 
+DEMO_CVSS_VECTORS = {
+    8.1: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+    9.8: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    9.1: "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+}
+
+
+def render_vulnerability_intelligence(dossier: SecurityCase) -> None:
+    """Expose the existing synthetic dossier through the V3 UI contract."""
+    st.header("Vulnerability Intelligence")
+    st.warning("DEMO · CVE/CVSS sintetici. Nessuna scansione, rete o verifica cloud reale è stata eseguita.")
+    st.caption("I collegamenti a risorsa e Terraform sono mapping dimostrativi verso il grafo Code → Architecture.")
+    st.caption("Campi esposti: CVE ID · CVSS score · CVSS vector · severità · risorsa · descrizione · evidenza · impatto · remediation · stato · mapping Terraform.")
+    rows=[]
+    for index,finding in enumerate(dossier.findings):
+        resource="aws_instance.web" if finding.asset_id=="i-demo-web-001" else finding.asset_id
+        rows.append({
+            "CVE ID":", ".join(finding.cves) or "Demo / non assegnato",
+            "CVSS score":finding.cvss,
+            "CVSS vector":DEMO_CVSS_VECTORS.get(finding.cvss,"Non determinabile"),
+            "Severità":finding.severity.value.title(),
+            "Fonte":finding.source.value,
+            "Data dato":finding.timestamp.isoformat(),
+            "Tipo dato":"Demo sintetico · non verificato",
+            "Risorsa grafico":resource,
+            "Descrizione":finding.category,
+            "Evidenza":"; ".join(item.description for item in finding.evidence),
+            "Impatto":dossier.technical_impact,
+            "Remediation":dossier.remediation[min(index,len(dossier.remediation)-1)],
+            "Stato":dossier.status.value.replace("_"," ").title()+" · Demo",
+            "Mapping Terraform":'resource "aws_instance" "web"' if resource=="aws_instance.web" else "Non determinabile",
+        })
+    st.dataframe(rows,hide_index=True,width="stretch")
+    selected=st.selectbox("Collegamento risorsa / Terraform",[row["Risorsa grafico"] for row in rows],key="v3_vulnerability_resource")
+    st.code(f"Graph resource: {selected}\nTerraform mapping: resource \"aws_instance\" \"web\"",language="hcl")
+    render_security_findings(dossier)
+
+
 def render_security_findings(dossier: SecurityCase) -> None:
     """Render an existing dossier without adding security-analysis logic to the UI."""
 
