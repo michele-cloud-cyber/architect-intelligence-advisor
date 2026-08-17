@@ -15,7 +15,7 @@ from v2.modules.multicloud_foundation import (
 from dashboard_v2.components.platform_lab import render_platform_lab
 
 
-def _runtime():
+def foundation_runtime():
     if "mc_history" not in st.session_state:
         st.session_state.mc_history = LocalScenarioHistory()
     if "mc_plugins" not in st.session_state:
@@ -32,7 +32,7 @@ def _runtime():
 
 
 def render_multicloud_platform() -> None:
-    orchestrator, governance = _runtime()
+    orchestrator, governance = foundation_runtime()
     st.title("Adaptive Multi-Cloud Landing Zone Orchestrator")
     st.caption("Foundation demo · AWS, Azure and GCP synthetic data · no credentials, SDKs, network calls or apply")
     parts = st.tabs([
@@ -40,17 +40,17 @@ def render_multicloud_platform() -> None:
         "Parte 3 · Storico e IaC", "Parte 4 · Governance",
     ])
     with parts[0]:
-        _overview(orchestrator)
+        render_multicloud_overview(orchestrator)
     with parts[1]:
         st.info("Il laboratorio esistente resta operativo e usa solo configurazioni locali simulate.")
         render_platform_lab()
     with parts[2]:
-        _history(orchestrator)
+        render_scenario_history(orchestrator)
     with parts[3]:
-        _governance(orchestrator, governance)
+        render_governance_plane(orchestrator, governance)
 
 
-def _overview(orchestrator: MultiCloudOrchestrator) -> None:
+def render_multicloud_overview(orchestrator: MultiCloudOrchestrator) -> None:
     st.header("Stato complessivo della landing zone")
     selected = st.multiselect("Provider", [p.value for p in (Provider.AWS, Provider.AZURE, Provider.GCP)], [p.value for p in (Provider.AWS, Provider.AZURE, Provider.GCP)])
     query = st.text_input("Ricerca risorse, account/subscription/project o regione")
@@ -69,7 +69,7 @@ def _overview(orchestrator: MultiCloudOrchestrator) -> None:
     st.caption("Tutti i valori sono sintetici. Le fonti JSON/YAML, Terraform, API read-only, CMDB, Security e FinOps sono contratti futuri, non connessioni attive.")
 
 
-def _history(orchestrator: MultiCloudOrchestrator) -> None:
+def render_scenario_history(orchestrator: MultiCloudOrchestrator) -> None:
     st.header("Scenari locali e confronto attuale/desiderato")
     provider = Provider(st.selectbox("Provider scenario", [p.value for p in (Provider.AWS, Provider.AZURE, Provider.GCP)]))
     name = st.text_input("Nome scenario", "Scenario consigliato")
@@ -87,7 +87,7 @@ def _history(orchestrator: MultiCloudOrchestrator) -> None:
     st.caption("Gli snapshot non vengono modificati retroattivamente. Export cloud, plan e apply non sono eseguiti.")
 
 
-def _governance(orchestrator: MultiCloudOrchestrator, governance: GovernanceControlPlane) -> None:
+def render_governance_plane(orchestrator: MultiCloudOrchestrator, governance: GovernanceControlPlane) -> None:
     st.header("Governance Control Plane e orchestratore")
     st.warning("Fail-closed: plan, approvazione e apply controllato sono bloccati in questa foundation locale.")
     st.dataframe(orchestrator.execution_plan((Provider.AWS,Provider.AZURE,Provider.GCP)),hide_index=True,width="stretch")
