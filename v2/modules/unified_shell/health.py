@@ -27,6 +27,7 @@ MODULE_PROBES = {
     "governance": ("Governance e orchestratore", "v2.modules.multicloud_foundation", "GovernanceControlPlane", False),
     "terraform": ("Terraform e validazione", "v2.modules.platform_lab.terraform", "generate_s3_package", False),
     "finops": ("FinOps trasversale", "v2.modules.finops_dashboard", "render_finops", True),
+    "security_findings": ("Vulnerability Intelligence", "dashboard_v2.components.security_findings", "render_vulnerability_intelligence", False),
 }
 
 

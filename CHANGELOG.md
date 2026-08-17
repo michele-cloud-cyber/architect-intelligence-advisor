@@ -2,6 +2,9 @@
 
 ## 3.0.0 — 2026-08-17
 
+- Fixed complete-view routing so Code → Architecture & Risk and the existing
+  synthetic Security Findings/CVE/CVSS dossier are directly reachable as separate
+  Code & Test Lab tabs.
 - Added fault-isolated bilingual four-area V3 experience.
 - Added static Terraform-to-architecture and risk analysis.
 - Added controlled `.tf` and ZIP ingestion with a fail-closed security gateway.

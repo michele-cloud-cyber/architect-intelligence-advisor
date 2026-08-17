@@ -13,6 +13,8 @@ from dashboard_v2.components.multicloud_foundation import (
 )
 from dashboard_v2.components.platform_lab import render_platform_lab
 from dashboard_v2.components.code_architecture import render_code_architecture
+from dashboard_v2.components.security_findings import render_vulnerability_intelligence
+from v2.modules.security_findings.service import build_demo_security_case
 from v2.modules.unified_shell import HealthStatus, NormalizedAppState, probe_modules
 
 
@@ -51,7 +53,7 @@ def render_unified_application() -> None:
         mode = st.radio(tx["mode"], ["Demo", "Simulation", "Read-only"], index=["Demo", "Simulation", "Read-only"].index(state.operating_mode))
         forced_failure = None
         if view == "Modalità diagnostica":
-            forced_failure = st.selectbox(tx["failure"], [None, "multicloud", "stable_lab", "governance", "terraform", "finops"], format_func=lambda value: tx["none"] if value is None else value)
+            forced_failure = st.selectbox(tx["failure"], [None, "multicloud", "stable_lab", "governance", "terraform", "security_findings", "finops"], format_func=lambda value: tx["none"] if value is None else value)
         st.session_state.normalized_app_state = state.evolve(active_view=view, operating_mode=mode)
         st.markdown(f"**{tx['version']}:** `{UNIFIED_VERSION}`")
         st.markdown(f"**{tx['active']}:** `{mode}`")
@@ -86,9 +88,10 @@ def render_unified_application() -> None:
     with sections[0]: _safe_section("Panoramica e dati multi-cloud", lambda: render_multicloud_overview(orchestrator), "multicloud", forced_failure)
     with sections[1]: _safe_section("Project Designer, controls & simulations", render_platform_lab, "stable_lab", forced_failure)
     with sections[2]:
-        lab,history_tabs=st.tabs(["Code → Architecture & Risk","History / Storico"])
-        with lab:_safe_section("Terraform static advisory",lambda:render_code_architecture(lang),"terraform",forced_failure)
-        with history_tabs:_safe_section("Scenario history",lambda:render_scenario_history(orchestrator),"multicloud",forced_failure)
+        architecture_tab,vulnerability_tab,history_tab=st.tabs(["Code → Architecture & Risk","Vulnerability Intelligence","History / Storico"])
+        with architecture_tab:_safe_section("Code → Architecture & Risk",lambda:render_code_architecture(lang),"terraform",forced_failure)
+        with vulnerability_tab:_safe_section("Vulnerability Intelligence",lambda:render_vulnerability_intelligence(build_demo_security_case()),"security_findings",forced_failure)
+        with history_tab:_safe_section("Scenario history",lambda:render_scenario_history(orchestrator),"multicloud",forced_failure)
     with sections[3]:
         _safe_section("Governance Control Plane & Orchestrator",lambda:render_governance_plane(orchestrator,governance),"governance",forced_failure)
         from v2.modules.finops_dashboard import render_finops

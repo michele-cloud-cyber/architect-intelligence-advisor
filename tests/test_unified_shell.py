@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import unittest
+from streamlit.testing.v1 import AppTest
 
 from v2.modules.unified_shell import HealthStatus, NormalizedAppState, probe_modules
 
@@ -45,6 +46,28 @@ class LauncherContractTests(unittest.TestCase):
         self.assertIn("streamlit_app.py", stable)
         self.assertIn("demo_streamlit_app.py", foundation)
         self.assertIn("unified_app.py", complete)
+
+
+class UnifiedExposureRegressionTests(unittest.TestCase):
+    def test_stable_features_remain_reachable_from_complete_view(self):
+        stable=AppTest.from_file(ROOT / "streamlit_app.py").run(timeout=30)
+        complete=AppTest.from_file(ROOT / "unified_app.py").run(timeout=30)
+        self.assertFalse(stable.exception); self.assertFalse(complete.exception)
+        stable_tabs={item.label for item in stable.tabs}
+        complete_tabs={item.label for item in complete.tabs}
+        expected={"Progetto","Analisi","Controlli","Simulazione","Terraform","Validazione","CI/CD"}
+        self.assertTrue(expected.issubset(stable_tabs))
+        self.assertTrue(expected.issubset(complete_tabs))
+        self.assertIn("Code → Architecture & Risk",complete_tabs)
+        self.assertIn("Vulnerability Intelligence",complete_tabs)
+
+    def test_vulnerability_demo_exposes_cve_cvss_resource_and_terraform(self):
+        complete=AppTest.from_file(ROOT / "unified_app.py").run(timeout=30)
+        labels={item.label for item in complete.tabs}
+        self.assertIn("Vulnerability Intelligence",labels)
+        frames=list(complete.dataframe)
+        columns={column for frame in frames for column in getattr(frame.value,"columns",())}
+        self.assertTrue({"CVE ID","CVSS score","CVSS vector","Risorsa grafico","Mapping Terraform"}.issubset(columns))
 
 
 if __name__ == "__main__":
